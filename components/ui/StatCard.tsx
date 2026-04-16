@@ -14,30 +14,44 @@ interface StatCardProps {
 
 export default function StatCard({ title, value, icon, description, trend, className }: StatCardProps) {
   return (
-    <div className={cn('bg-white dark:bg-gray-800 rounded-xl shadow p-6', className)}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
-          {description && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>
-          )}
-          {trend && (
-            <div className="flex items-center mt-2">
-              <span
-                className={cn(
-                  'text-sm font-medium',
-                  trend.isPositive ? 'text-green-600' : 'text-red-600'
-                )}
-              >
-                {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
-              </span>
-              <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">vs last month</span>
-            </div>
-          )}
+    <div
+      className={cn('rounded-2xl p-5 transition-all hover:-translate-y-0.5', className)}
+      style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border-light)',
+        boxShadow: 'var(--shadow-sm)',
+      }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+          style={{ background: 'var(--cream)' }}
+        >
+          {icon}
         </div>
-        <div className="text-4xl">{icon}</div>
       </div>
+      <p className="text-3xl font-bold mb-1" style={{ color: 'var(--purple)' }}>
+        {value}
+      </p>
+      <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+        {title}
+      </p>
+      {description && (
+        <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+          {description}
+        </p>
+      )}
+      {trend && (
+        <div className="flex items-center mt-2 gap-1">
+          <span
+            className="text-xs font-semibold"
+            style={{ color: trend.isPositive ? '#4A7A5A' : '#C0445A' }}
+          >
+            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
+          </span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>vs last month</span>
+        </div>
+      )}
     </div>
   );
 }

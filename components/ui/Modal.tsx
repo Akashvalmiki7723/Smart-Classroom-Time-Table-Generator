@@ -25,30 +25,39 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     <Fragment>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+        className="fixed inset-0 z-40 transition-opacity"
+        style={{ background: 'rgba(45,32,64,0.4)', backdropFilter: 'blur(4px)' }}
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className={cn(
-            'bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full transform transition-all',
-            sizes[size]
-          )}
+          className={cn('rounded-2xl w-full', sizes[size])}
+          style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border-light)',
+            boxShadow: 'var(--shadow-lg)',
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           {title && (
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div
+              className="flex items-center justify-between px-6 py-4"
+              style={{ borderBottom: '1px solid var(--border-light)' }}
+            >
+              <h2 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
                 {title}
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                style={{ color: 'var(--text-muted)' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--cream)')}
+                onMouseLeave={e => (e.currentTarget.style.background = '')}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -56,17 +65,19 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
           )}
 
           {/* Content */}
-          <div className="px-6 py-4">{children}</div>
+          <div className="px-6 py-5">{children}</div>
         </div>
       </div>
     </Fragment>
   );
 }
 
-// Modal Footer Component
 export function ModalFooter({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700 -mx-6 -mb-4 mt-4', className)}>
+    <div
+      className={cn('flex justify-end gap-3 pt-4 mt-4', className)}
+      style={{ borderTop: '1px solid var(--border-light)' }}
+    >
       {children}
     </div>
   );

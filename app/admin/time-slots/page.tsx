@@ -1,171 +1,100 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Loading from '@/components/ui/Loading';
 
 interface TimeSlot {
-  _id: string;
-  name: string;
-  startTime: string;
-  endTime: string;
-  slotNumber: number;
-  type: 'theory' | 'practical' | 'break' | 'lunch';
-  duration: number;
-  isActive: boolean;
+  _id: string; name: string; startTime: string; endTime: string;
+  slotNumber: number; type: 'theory' | 'practical' | 'break' | 'lunch';
+  duration: number; isActive: boolean;
 }
+
+const TYPE_STYLES: Record<string, React.CSSProperties> = {
+  theory:    { background: 'var(--teal-light)',     color: 'var(--teal-dark)' },
+  practical: { background: 'var(--lavender-light)', color: 'var(--purple-dark)' },
+  lunch:     { background: '#FEF3E2',               color: '#B8720A' },
+  break:     { background: 'var(--cream)',           color: 'var(--text-secondary)' },
+};
+const ROW_BG: Record<string, string> = {
+  lunch: '#FEF9E7', break: 'var(--cream-light)',
+};
 
 export default function AdminTimeSlotsPage() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTimeSlots();
+    fetch('/api/time-slots')
+      .then(r => r.json())
+      .then(d => { setTimeSlots(d.timeSlots || []); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  const fetchTimeSlots = async () => {
-    try {
-      const res = await fetch('/api/time-slots');
-      if (res.ok) {
-        const data = await res.json();
-        setTimeSlots(data.timeSlots || []);
-      }
-    } catch (error) {
-      console.error('Error fetching time slots:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'theory':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'practical':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'lunch':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      case 'break':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <Loading size="lg" text="Loading time slots..." />;
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Time Slots</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage class periods and breaks schedule
-          </p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Time Slots</h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>Manage class periods and breaks schedule</p>
         </div>
         <div className="text-right">
-          <span className="text-3xl font-bold text-purple-600">{timeSlots.length}</span>
-          <p className="text-sm text-gray-500">Total Slots</p>
+          <span className="text-3xl font-bold" style={{ color: 'var(--purple)' }}>{timeSlots.length}</span>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Slots</p>
         </div>
       </div>
 
       {/* Visual Timeline */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Daily Schedule</h2>
+      <div className="rounded-2xl p-6" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Daily Schedule Timeline</h2>
         <div className="space-y-2">
-          {timeSlots.map((slot, index) => (
-            <div
-              key={slot._id}
-              className={`flex items-center gap-4 p-4 rounded-lg ${
-                slot.type === 'lunch' || slot.type === 'break'
-                  ? 'bg-orange-50 dark:bg-orange-900/20'
-                  : 'bg-blue-50 dark:bg-blue-900/20'
-              }`}
-            >
-              <div className="w-24 text-center">
-                <p className="text-lg font-bold text-gray-900 dark:text-white">{slot.startTime}</p>
-                <p className="text-xs text-gray-500">to</p>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">{slot.endTime}</p>
+          {timeSlots.map(slot => (
+            <div key={slot._id} className="flex items-center gap-4 p-4 rounded-xl"
+              style={{ background: ROW_BG[slot.type] || 'var(--cream-light)', border: '1px solid var(--border-light)' }}>
+              <div className="w-28 text-center flex-shrink-0">
+                <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{slot.startTime}</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>to</p>
+                <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{slot.endTime}</p>
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">
-                    {slot.type === 'lunch' ? '🍽️' : slot.type === 'break' ? '☕' : '📚'}
-                  </span>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{slot.name}</h3>
-                    <p className="text-sm text-gray-500">{slot.duration} minutes</p>
-                  </div>
-                </div>
+                <h3 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{slot.name}</h3>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{slot.duration} minutes</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className={`px-3 py-1 text-sm font-medium rounded-full ${getTypeColor(slot.type)}`}>
-                  {slot.type}
-                </span>
-                <span className="px-3 py-1 text-sm font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                  Slot #{slot.slotNumber}
-                </span>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold capitalize" style={TYPE_STYLES[slot.type]}>{slot.type}</span>
+                <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ background: 'var(--cream)', color: 'var(--text-secondary)' }}>#{slot.slotNumber}</span>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Table View */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Time Slots Details</h2>
+      {/* Detail Table */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+        <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--border-light)' }}>
+          <h2 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>Time Slot Details</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Slot #
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Start Time
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  End Time
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Duration
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Type
-                </th>
+            <thead>
+              <tr style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
+                {['Slot #','Name','Start','End','Duration','Type'].map(h => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {timeSlots.map((slot) => (
-                <tr key={slot._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {slot.slotNumber}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {slot.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {slot.startTime}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {slot.endTime}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {slot.duration} min
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(slot.type)}`}>
-                      {slot.type}
-                    </span>
+            <tbody>
+              {timeSlots.map(slot => (
+                <tr key={slot._id} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <td className="px-5 py-3.5 text-sm font-bold" style={{ color: 'var(--purple)' }}>{slot.slotNumber}</td>
+                  <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{slot.name}</td>
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>{slot.startTime}</td>
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>{slot.endTime}</td>
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>{slot.duration} min</td>
+                  <td className="px-5 py-3.5">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize" style={TYPE_STYLES[slot.type]}>{slot.type}</span>
                   </td>
                 </tr>
               ))}
@@ -175,8 +104,8 @@ export default function AdminTimeSlotsPage() {
       </div>
 
       {timeSlots.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
-          <p className="text-gray-500 dark:text-gray-400">No time slots configured</p>
+        <div className="text-center py-16 rounded-2xl" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No time slots configured</p>
         </div>
       )}
     </div>

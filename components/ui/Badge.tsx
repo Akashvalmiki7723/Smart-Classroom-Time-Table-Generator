@@ -7,29 +7,22 @@ interface BadgeProps {
   className?: string;
 }
 
-export default function Badge({ children, variant = 'default', size = 'sm', className }: BadgeProps) {
-  const variants = {
-    default: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-    success: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-    danger: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-    error: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-    info: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-  };
+const variantStyles: Record<string, React.CSSProperties> = {
+  default: { background: 'var(--cream)',         color: 'var(--text-secondary)' },
+  success: { background: '#EEF5F0',              color: '#4A7A5A' },
+  warning: { background: '#FEF9E7',              color: '#B8720A' },
+  danger:  { background: '#FFF0F2',              color: '#C0445A' },
+  error:   { background: 'var(--lavender-light)', color: 'var(--purple-dark)' },
+  info:    { background: 'var(--teal-light)',     color: 'var(--teal-dark)' },
+};
 
-  const sizes = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-2.5 py-1 text-sm',
-  };
+export default function Badge({ children, variant = 'default', size = 'sm', className }: BadgeProps) {
+  const sizeClass = size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3 py-1 text-sm';
 
   return (
     <span
-      className={cn(
-        'inline-flex items-center font-medium rounded-full',
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={cn('inline-flex items-center font-semibold rounded-full', sizeClass, className)}
+      style={variantStyles[variant]}
     >
       {children}
     </span>

@@ -9,7 +9,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, hint, id, ...props }, ref) => {
+  ({ className, label, error, helperText, hint, id, style, ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
@@ -17,7 +17,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="block text-sm font-medium mb-1.5"
+            style={{ color: 'var(--text-secondary)' }}
           >
             {label}
           </label>
@@ -25,20 +26,27 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          className={cn(
-            'w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-offset-0',
-            error
-              ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-              : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500',
-            'disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed',
-            className
-          )}
+          className={cn('w-full px-4 py-2.5 rounded-xl text-sm transition-all', className)}
+          style={{
+            border: error ? '1.5px solid #C0445A' : '1.5px solid var(--border)',
+            background: 'var(--cream-light)',
+            color: 'var(--text-primary)',
+            outline: 'none',
+            ...style,
+          }}
+          onFocus={e => {
+            e.target.style.borderColor = error ? '#C0445A' : 'var(--purple)';
+            e.target.style.background = '#fff';
+          }}
+          onBlur={e => {
+            e.target.style.borderColor = error ? '#C0445A' : 'var(--border)';
+            e.target.style.background = 'var(--cream-light)';
+          }}
           {...props}
         />
-        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+        {error && <p className="mt-1.5 text-xs" style={{ color: '#C0445A' }}>{error}</p>}
         {(helperText || hint) && !error && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{helperText || hint}</p>
+          <p className="mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>{helperText || hint}</p>
         )}
       </div>
     );

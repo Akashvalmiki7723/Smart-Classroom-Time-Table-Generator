@@ -15,7 +15,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, options, placeholder, id, children, ...props }, ref) => {
+  ({ className, label, error, options, placeholder, id, children, style, ...props }, ref) => {
     const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
@@ -23,7 +23,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="block text-sm font-medium mb-1.5"
+            style={{ color: 'var(--text-secondary)' }}
           >
             {label}
           </label>
@@ -31,15 +32,14 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           id={selectId}
-          className={cn(
-            'w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors appearance-none cursor-pointer',
-            'focus:outline-none focus:ring-2 focus:ring-offset-0',
-            error
-              ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-              : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500',
-            'disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed',
-            className
-          )}
+          className={cn('w-full px-4 py-2.5 rounded-xl text-sm transition-all appearance-none cursor-pointer', className)}
+          style={{
+            border: error ? '1.5px solid #C0445A' : '1.5px solid var(--border)',
+            background: 'var(--cream-light)',
+            color: 'var(--text-primary)',
+            outline: 'none',
+            ...style,
+          }}
           {...props}
         >
           {placeholder && (
@@ -53,7 +53,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           ))}
         </select>
-        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+        {error && <p className="mt-1.5 text-xs" style={{ color: '#C0445A' }}>{error}</p>}
       </div>
     );
   }

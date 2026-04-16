@@ -1,14 +1,14 @@
-import { StatCard } from '@/components/ui';
 import dbConnect from '@/lib/db';
 import User from '@/models/User';
 import Department from '@/models/Department';
 import Subject from '@/models/Subject';
 import Room from '@/models/Room';
 import Link from 'next/link';
+import { Users, Building2, BookOpen, DoorOpen } from 'lucide-react';
 
 async function getStats() {
   await dbConnect();
-  
+
   const [usersCount, departmentsCount, subjectsCount, roomsCount, recentUsers] = await Promise.all([
     User.countDocuments(),
     Department.countDocuments(),
@@ -20,102 +20,154 @@ async function getStats() {
   return { usersCount, departmentsCount, subjectsCount, roomsCount, recentUsers };
 }
 
+const roleBadgeStyle: Record<string, React.CSSProperties> = {
+  admin:       { background: 'var(--lavender-light)', color: 'var(--purple-dark)' },
+  hod:         { background: 'var(--teal-light)',     color: 'var(--teal-dark)' },
+  coordinator: { background: 'var(--cream)',           color: '#7B6FAF' },
+  faculty:     { background: '#EEF5F0',               color: '#4A7A5A' },
+  student:     { background: '#FEF3E2',               color: '#B8720A' },
+};
+
 export default async function AdminDashboard() {
   const stats = await getStats();
 
+  const statCards = [
+    { title: 'Total Users', value: stats.usersCount, href: '/admin/users', icon: <Users className="w-5 h-5" />, color: 'var(--purple)' },
+    { title: 'Departments', value: stats.departmentsCount, href: '/admin/departments', icon: <Building2 className="w-5 h-5" />, color: 'var(--teal-dark)' },
+    { title: 'Subjects', value: stats.subjectsCount, href: '/admin/subjects', icon: <BookOpen className="w-5 h-5" />, color: 'var(--lavender-dark, var(--purple))' },
+    { title: 'Rooms', value: stats.roomsCount, href: '/admin/rooms', icon: <DoorOpen className="w-5 h-5" />, color: '#7B9E87' },
+  ];
+
   return (
     <div>
-      {/* Page Header */}
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">Welcome to the admin dashboard</p>
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Dashboard</h1>
+        <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+          Welcome back! Here&apos;s an overview of Presidency University.
+        </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Link href="/admin/users">
-          <StatCard
-            title="Total Users"
-            value={stats.usersCount}
-            icon="👥"
-            description="Click to manage"
-          />
-        </Link>
-        <Link href="/admin/departments">
-          <StatCard
-            title="Departments"
-            value={stats.departmentsCount}
-            icon="🏛️"
-            description="Click to manage"
-          />
-        </Link>
-        <StatCard
-          title="Subjects"
-          value={stats.subjectsCount}
-          icon="📚"
-          description="Coming in Phase 6"
-        />
-        <StatCard
-          title="Rooms"
-          value={stats.roomsCount}
-          icon="🏫"
-          description="Coming in Phase 6"
-        />
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        {statCards.map((card) => (
+          <Link href={card.href} key={card.title}>
+            <div
+              className="rounded-2xl p-5 cursor-pointer transition-all hover:-translate-y-0.5"
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border-light)',
+                boxShadow: 'var(--shadow-sm)',
+              }}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: 'var(--cream)', color: card.color }}
+                >
+                  {card.icon}
+                </div>
+              </div>
+              <p className="text-3xl font-bold mb-1" style={{ color: card.color }}>
+                {card.value}
+              </p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+                {card.title}
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <div
+        className="rounded-2xl p-6 mb-6"
+        style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border-light)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
+        <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
           Quick Actions
         </h2>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-3">
           <Link
             href="/admin/users/new"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, var(--purple), var(--lavender))' }}
           >
-            👤 Create User
+            + Create User
           </Link>
           <Link
             href="/admin/departments/new"
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+            style={{
+              background: 'var(--teal-light)',
+              color: 'var(--teal-dark)',
+              border: '1px solid var(--teal)',
+            }}
           >
-            🏛️ Add Department
+            + Add Department
           </Link>
           <Link
             href="/admin/users"
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+            style={{
+              background: 'var(--cream)',
+              color: 'var(--text-secondary)',
+              border: '1px solid var(--border)',
+            }}
           >
-            📋 View All Users
+            View All Users
           </Link>
         </div>
       </div>
 
       {/* Recent Users */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Recent Users
+      <div
+        className="rounded-2xl p-6"
+        style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border-light)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
+            Recently Joined Users
           </h2>
-          <Link href="/admin/users" className="text-indigo-600 hover:text-indigo-700 text-sm">
-            View All →
+          <Link
+            href="/admin/users"
+            className="text-sm font-medium transition-colors"
+            style={{ color: 'var(--purple)' }}
+          >
+            View all →
           </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Name</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Email</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Role</th>
+              <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+                <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Name</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Email</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Role</th>
               </tr>
             </thead>
             <tbody>
               {stats.recentUsers.map((user) => (
-                <tr key={String(user._id)} className="border-b border-gray-100 dark:border-gray-700/50">
-                  <td className="py-3 px-4 text-gray-900 dark:text-white">{user.name}</td>
-                  <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{user.email}</td>
-                  <td className="py-3 px-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 capitalize">
+                <tr key={String(user._id)} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <td className="py-3.5 px-4 text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                    {user.name}
+                  </td>
+                  <td className="py-3.5 px-4 text-sm" style={{ color: 'var(--text-muted)' }}>
+                    {user.email}
+                  </td>
+                  <td className="py-3.5 px-4">
+                    <span
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize"
+                      style={roleBadgeStyle[user.role as string] || roleBadgeStyle.student}
+                    >
                       {user.role}
                     </span>
                   </td>
@@ -124,19 +176,6 @@ export default async function AdminDashboard() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* Info Box */}
-      <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-green-800 dark:text-green-300 mb-2">
-          ✅ Phase 4 Complete!
-        </h3>
-        <p className="text-green-700 dark:text-green-400 mb-2">
-          User and Department management are fully functional. You can create, edit, and delete users and departments.
-        </p>
-        <p className="text-sm text-green-600 dark:text-green-500">
-          Next: Phase 5 - HOD Module (Faculty management, Timetable approvals)
-        </p>
       </div>
     </div>
   );

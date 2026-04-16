@@ -2,25 +2,37 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Loading from '@/components/ui/Loading';
 
 interface Timetable {
-  _id: string;
-  name: string;
+  _id: string; name: string;
   department: { _id: string; name: string; code: string };
   batch?: { _id: string; name: string; year: number; division: string };
-  academicYear: string;
-  semester: number;
+  academicYear: string; semester: number;
   status: 'draft' | 'pending' | 'approved' | 'published' | 'rejected';
   createdBy: { name: string };
-  approvedBy?: { name: string };
-  createdAt: string;
+  approvedBy?: { name: string }; createdAt: string;
 }
+interface Department { _id: string; name: string; code: string; }
 
-interface Department {
-  _id: string;
-  name: string;
-  code: string;
-}
+const STATUS_STYLES: Record<string, React.CSSProperties> = {
+  published: { background: '#EEF5F0',               color: '#4A7A5A' },
+  approved:  { background: 'var(--teal-light)',     color: 'var(--teal-dark)' },
+  pending:   { background: '#FEF9E7',               color: '#B8720A' },
+  rejected:  { background: '#FFF0F2',               color: '#C0445A' },
+  draft:     { background: 'var(--cream)',           color: 'var(--text-secondary)' },
+};
+const STAT_CARDS = [
+  { key: 'published', label: 'Published', color: '#4A7A5A',            bg: '#EEF5F0' },
+  { key: 'approved',  label: 'Approved',  color: 'var(--teal-dark)',   bg: 'var(--teal-light)' },
+  { key: 'pending',   label: 'Pending',   color: '#B8720A',            bg: '#FEF9E7' },
+  { key: 'draft',     label: 'Drafts',    color: 'var(--text-secondary)', bg: 'var(--cream)' },
+];
+const selectStyle: React.CSSProperties = {
+  padding: '8px 12px', borderRadius: '10px', fontSize: '13px',
+  border: '1.5px solid var(--border)', background: 'var(--cream-light)',
+  color: 'var(--text-primary)', outline: 'none',
+};
 
 export default function AdminTimetablesPage() {
   const [timetables, setTimetables] = useState<Timetable[]>([]);
@@ -29,123 +41,57 @@ export default function AdminTimetablesPage() {
   const [filterDept, setFilterDept] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  useEffect(() => {
-    fetchTimetables();
-    fetchDepartments();
-  }, [filterDept, filterStatus]);
+  useEffect(() => { fetchTimetables(); fetchDepartments(); }, [filterDept, filterStatus]);
 
   const fetchTimetables = async () => {
     try {
       let url = '/api/timetables?';
       if (filterDept) url += `department=${filterDept}&`;
       if (filterStatus) url += `status=${filterStatus}`;
-
       const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        setTimetables(data.timetables || []);
-      }
-    } catch (error) {
-      console.error('Error fetching timetables:', error);
-    } finally {
-      setLoading(false);
-    }
+      if (res.ok) { const d = await res.json(); setTimetables(d.timetables || []); }
+    } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 
   const fetchDepartments = async () => {
     try {
       const res = await fetch('/api/departments');
-      if (res.ok) {
-        const data = await res.json();
-        setDepartments(data.departments || []);
-      }
-    } catch (error) {
-      console.error('Error fetching departments:', error);
-    }
+      if (res.ok) { const d = await res.json(); setDepartments(d.departments || []); }
+    } catch (e) { console.error(e); }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'published':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'approved':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'rejected':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'draft':
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
-    }
-  };
+  const counts = STAT_CARDS.reduce((acc, c) => {
+    acc[c.key] = timetables.filter(t => t.status === c.key).length;
+    return acc;
+  }, {} as Record<string, number>);
 
-  const statusCounts = {
-    published: timetables.filter((t) => t.status === 'published').length,
-    approved: timetables.filter((t) => t.status === 'approved').length,
-    pending: timetables.filter((t) => t.status === 'pending').length,
-    draft: timetables.filter((t) => t.status === 'draft').length,
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <Loading size="lg" text="Loading timetables..." />;
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Timetables</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            View and manage all timetables across departments
-          </p>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Timetables</h1>
+        <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>View and manage all timetables across departments</p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Status Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-green-600">{statusCounts.published}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Published</p>
-        </div>
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-blue-600">{statusCounts.approved}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Approved</p>
-        </div>
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-yellow-600">{statusCounts.pending}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
-        </div>
-        <div className="bg-gray-50 dark:bg-gray-700/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-gray-600">{statusCounts.draft}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Drafts</p>
-        </div>
+        {STAT_CARDS.map(({ key, label, color, bg }) => (
+          <div key={key} className="rounded-2xl p-4" style={{ background: bg, border: '1px solid var(--border-light)' }}>
+            <p className="text-2xl font-bold" style={{ color }}>{counts[key] || 0}</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{label}</p>
+          </div>
+        ))}
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select
-            value={filterDept}
-            onChange={(e) => setFilterDept(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+      <div className="rounded-2xl p-5" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <select value={filterDept} onChange={e => setFilterDept(e.target.value)} style={selectStyle}>
             <option value="">All Departments</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept._id}>
-                {dept.name}
-              </option>
-            ))}
+            {departments.map(d => <option key={d._id} value={d._id}>{d.name}</option>)}
           </select>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={selectStyle}>
             <option value="">All Statuses</option>
             <option value="published">Published</option>
             <option value="approved">Approved</option>
@@ -156,84 +102,47 @@ export default function AdminTimetablesPage() {
         </div>
       </div>
 
-      {/* Timetables List */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+      {/* Table */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Timetable
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Department
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Batch
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Semester
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Created By
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
-                  Actions
-                </th>
+            <thead>
+              <tr style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
+                {['Timetable','Department','Batch','Semester','Status','Created By',''].map((h, i) => (
+                  <th key={i} className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {timetables.map((timetable) => (
-                <tr key={timetable._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      {timetable.name}
-                    </div>
-                    <div className="text-xs text-gray-500">{timetable.academicYear}</div>
+            <tbody>
+              {timetables.map(t => (
+                <tr key={t._id} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <td className="px-5 py-3.5">
+                    <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{t.name}</div>
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.academicYear}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {timetable.department?.name}
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>{t.department?.name}</td>
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    {t.batch ? `Year ${t.batch.year} – ${t.batch.division}` : '—'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {timetable.batch ? `Year ${timetable.batch.year} - ${timetable.batch.division}` : '-'}
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>Sem {t.semester}</td>
+                  <td className="px-5 py-3.5">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize" style={STATUS_STYLES[t.status]}>{t.status}</span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    Sem {timetable.semester}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(timetable.status)}`}>
-                      {timetable.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {timetable.createdBy?.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Link
-                      href={`/admin/timetables/${timetable._id}`}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
-                    >
-                      View
-                    </Link>
+                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--text-secondary)' }}>{t.createdBy?.name}</td>
+                  <td className="px-5 py-3.5">
+                    <Link href={`/admin/timetables/${t._id}`} className="text-xs font-semibold" style={{ color: 'var(--purple)' }}>View →</Link>
                   </td>
                 </tr>
               ))}
+              {timetables.length === 0 && (
+                <tr><td colSpan={7} className="px-5 py-16 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+                  No timetables found. Timetables are created by coordinators.
+                </td></tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
-
-      {timetables.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">No timetables found</p>
-          <p className="text-sm text-gray-400">
-            Timetables are created by coordinators. Once created, they will appear here.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

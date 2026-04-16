@@ -24,7 +24,6 @@ export default function Table<T>({
   emptyMessage = 'No data available',
   onRowClick,
 }: TableProps<T>) {
-  // Default keyExtractor uses _id or index
   const getKey = keyExtractor || ((item: T, index?: number) => {
     const id = (item as Record<string, unknown>)._id;
     return id ? String(id) : String(index);
@@ -32,41 +31,40 @@ export default function Table<T>({
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
-        <div className="animate-pulse p-6">
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4" />
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+      <div className="rounded-xl overflow-hidden p-6" style={{ background: 'var(--surface)' }}>
+        <div className="animate-pulse space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="h-4 rounded-lg" style={{ background: 'var(--cream)' }} />
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow">
+    <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)' }}>
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr>
+          <thead>
+            <tr style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
-                  className={cn(
-                    'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider',
-                    column.className
-                  )}
+                  className={cn('px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider', column.className)}
+                  style={{ color: 'var(--text-muted)' }}
                 >
                   {column.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody>
             {data.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+                  className="px-6 py-12 text-center text-sm"
+                  style={{ color: 'var(--text-muted)' }}
                 >
                   {emptyMessage}
                 </td>
@@ -76,18 +74,16 @@ export default function Table<T>({
                 <tr
                   key={getKey(item, index)}
                   onClick={() => onRowClick?.(item)}
-                  className={cn(
-                    'hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors',
-                    onRowClick && 'cursor-pointer'
-                  )}
+                  className={cn('transition-colors', onRowClick && 'cursor-pointer')}
+                  style={{ borderBottom: '1px solid var(--border-light)' }}
+                  onMouseEnter={e => { if (onRowClick) (e.currentTarget as HTMLElement).style.background = 'var(--cream-light)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
                 >
                   {columns.map((column) => (
                     <td
                       key={String(column.key)}
-                      className={cn(
-                        'px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100',
-                        column.className
-                      )}
+                      className={cn('px-6 py-4 text-sm', column.className)}
+                      style={{ color: 'var(--text-primary)' }}
                     >
                       {column.render
                         ? column.render(item)

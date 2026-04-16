@@ -111,8 +111,8 @@ export default function UsersPage() {
       label: 'Name',
       render: (user: User) => (
         <div>
-          <div className="font-medium text-gray-900 dark:text-white">{user.name}</div>
-          <div className="text-sm text-gray-500">{user.email}</div>
+          <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{user.name}</div>
+          <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{user.email}</div>
         </div>
       ),
     },
@@ -129,8 +129,8 @@ export default function UsersPage() {
       key: 'department',
       label: 'Department',
       render: (user: User) => (
-        <span className="text-gray-600 dark:text-gray-400">
-          {user.department?.name || '-'}
+        <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          {user.department?.name || '—'}
         </span>
       ),
     },
@@ -166,15 +166,14 @@ export default function UsersPage() {
 
   return (
     <div>
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage all system users</p>
+      <div className="mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>User Management</h1>
+            <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>Manage all system users</p>
+          </div>
+          <Link href="/admin/users/new"><Button>+ Add New User</Button></Link>
         </div>
-        <Link href="/admin/users/new">
-          <Button>+ Add New User</Button>
-        </Link>
       </div>
 
       {/* Filters */}
@@ -209,7 +208,7 @@ export default function UsersPage() {
           </div>
         ) : users.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400">No users found</p>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No users found</p>
           </div>
         ) : (
           <>
@@ -217,8 +216,8 @@ export default function UsersPage() {
             
             {/* Pagination */}
             {pagination.pages > 1 && (
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-between p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                   Showing {(pagination.page - 1) * pagination.limit + 1} to{' '}
                   {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
                   {pagination.total} users
@@ -253,7 +252,7 @@ export default function UsersPage() {
         onClose={() => setDeleteModal({ open: false, user: null })}
         title="Delete User"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
           Are you sure you want to delete <strong>{deleteModal.user?.name}</strong>? 
           This action cannot be undone.
         </p>

@@ -66,7 +66,7 @@ export default async function CoordinatorLayout({ children }: CoordinatorLayoutP
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Sidebar items={coordinatorNavItems} />
       <div className="ml-64">
         <Navbar user={session.user} />

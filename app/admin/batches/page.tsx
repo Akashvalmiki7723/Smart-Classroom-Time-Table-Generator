@@ -1,24 +1,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Loading from '@/components/ui/Loading';
 
 interface Batch {
-  _id: string;
-  name: string;
+  _id: string; name: string;
   department: { _id: string; name: string; code: string };
-  year: number;
-  semester: number;
-  division: string;
-  studentCount: number;
-  academicYear: string;
-  isActive: boolean;
+  year: number; semester: number; division: string;
+  studentCount: number; academicYear: string; isActive: boolean;
 }
+interface Department { _id: string; name: string; code: string; }
 
-interface Department {
-  _id: string;
-  name: string;
-  code: string;
-}
+const selectStyle: React.CSSProperties = {
+  padding: '8px 12px', borderRadius: '10px', fontSize: '13px',
+  border: '1.5px solid var(--border)', background: 'var(--cream-light)',
+  color: 'var(--text-primary)', outline: 'none',
+};
 
 export default function AdminBatchesPage() {
   const [batches, setBatches] = useState<Batch[]>([]);
@@ -27,142 +24,92 @@ export default function AdminBatchesPage() {
   const [filterDept, setFilterDept] = useState('');
   const [filterYear, setFilterYear] = useState('');
 
-  useEffect(() => {
-    fetchBatches();
-    fetchDepartments();
-  }, [filterDept, filterYear]);
+  useEffect(() => { fetchBatches(); fetchDepartments(); }, [filterDept, filterYear]);
 
   const fetchBatches = async () => {
     try {
       let url = '/api/batches?';
       if (filterDept) url += `department=${filterDept}&`;
       if (filterYear) url += `year=${filterYear}`;
-
       const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        setBatches(data.batches || []);
-      }
-    } catch (error) {
-      console.error('Error fetching batches:', error);
-    } finally {
-      setLoading(false);
-    }
+      if (res.ok) { const d = await res.json(); setBatches(d.batches || []); }
+    } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 
   const fetchDepartments = async () => {
     try {
       const res = await fetch('/api/departments');
-      if (res.ok) {
-        const data = await res.json();
-        setDepartments(data.departments || []);
-      }
-    } catch (error) {
-      console.error('Error fetching departments:', error);
-    }
+      if (res.ok) { const d = await res.json(); setDepartments(d.departments || []); }
+    } catch (e) { console.error(e); }
   };
 
-  const groupedBatches = batches.reduce((acc, batch) => {
-    const deptName = batch.department?.name || 'Unknown';
-    if (!acc[deptName]) acc[deptName] = {};
-    const yearKey = `Year ${batch.year}`;
-    if (!acc[deptName][yearKey]) acc[deptName][yearKey] = [];
-    acc[deptName][yearKey].push(batch);
+  const totalStudents = batches.reduce((s, b) => s + (b.studentCount || 0), 0);
+
+  const grouped = batches.reduce((acc, b) => {
+    const dept = b.department?.name || 'Unknown';
+    if (!acc[dept]) acc[dept] = {};
+    const yr = `Year ${b.year}`;
+    if (!acc[dept][yr]) acc[dept][yr] = [];
+    acc[dept][yr].push(b);
     return acc;
   }, {} as Record<string, Record<string, Batch[]>>);
 
-  const totalStudents = batches.reduce((sum, b) => sum + (b.studentCount || 0), 0);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <Loading size="lg" text="Loading batches..." />;
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Batches</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage student batches and sections
-          </p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Batches</h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>Manage student batches and sections</p>
         </div>
         <div className="flex gap-6">
           <div className="text-right">
-            <span className="text-3xl font-bold text-blue-600">{batches.length}</span>
-            <p className="text-sm text-gray-500">Total Batches</p>
+            <span className="text-3xl font-bold" style={{ color: 'var(--purple)' }}>{batches.length}</span>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Batches</p>
           </div>
           <div className="text-right">
-            <span className="text-3xl font-bold text-green-600">{totalStudents}</span>
-            <p className="text-sm text-gray-500">Total Students</p>
+            <span className="text-3xl font-bold" style={{ color: 'var(--teal-dark)' }}>{totalStudents}</span>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Students</p>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select
-            value={filterDept}
-            onChange={(e) => setFilterDept(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+      <div className="rounded-2xl p-5" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <select value={filterDept} onChange={e => setFilterDept(e.target.value)} style={selectStyle}>
             <option value="">All Departments</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept._id}>
-                {dept.name}
-              </option>
-            ))}
+            {departments.map(d => <option key={d._id} value={d._id}>{d.name}</option>)}
           </select>
-          <select
-            value={filterYear}
-            onChange={(e) => setFilterYear(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+          <select value={filterYear} onChange={e => setFilterYear(e.target.value)} style={selectStyle}>
             <option value="">All Years</option>
-            {[1, 2, 3, 4].map((year) => (
-              <option key={year} value={year}>
-                Year {year}
-              </option>
-            ))}
+            {[1,2,3,4].map(y => <option key={y} value={y}>Year {y}</option>)}
           </select>
         </div>
       </div>
 
       {/* Batches by Department */}
-      {Object.entries(groupedBatches).map(([deptName, years]) => (
-        <div key={deptName} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              🏛️ {deptName}
-            </h2>
+      {Object.entries(grouped).map(([deptName, years]) => (
+        <div key={deptName} className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="px-6 py-4" style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
+            <h2 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{deptName}</h2>
           </div>
-          <div className="p-6">
+          <div className="p-5 space-y-5">
             {Object.entries(years).map(([yearName, yearBatches]) => (
-              <div key={yearName} className="mb-6 last:mb-0">
-                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                  📚 {yearName}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {yearBatches.map((batch) => (
-                    <div
-                      key={batch._id}
-                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900 dark:text-white">
-                          Section {batch.division}
-                        </h4>
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                          Sem {batch.semester}
-                        </span>
+              <div key={yearName}>
+                <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>{yearName}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {yearBatches.map(batch => (
+                    <div key={batch._id} className="rounded-xl p-4 transition-all hover:-translate-y-0.5"
+                      style={{ border: '1px solid var(--border)', background: 'var(--cream-light)', boxShadow: 'var(--shadow-sm)' }}>
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>Section {batch.division}</h4>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: 'var(--teal-light)', color: 'var(--teal-dark)' }}>Sem {batch.semester}</span>
                       </div>
-                      <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                        <p>👥 {batch.studentCount} Students</p>
-                        <p>📅 {batch.academicYear}</p>
+                      <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                        <p>{batch.studentCount} Students</p>
+                        <p>{batch.academicYear}</p>
                       </div>
                     </div>
                   ))}
@@ -174,8 +121,8 @@ export default function AdminBatchesPage() {
       ))}
 
       {batches.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
-          <p className="text-gray-500 dark:text-gray-400">No batches found</p>
+        <div className="text-center py-16 rounded-2xl" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No batches found</p>
         </div>
       )}
     </div>

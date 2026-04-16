@@ -1,19 +1,32 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Loading from '@/components/ui/Loading';
 
 interface Room {
-  _id: string;
-  name: string;
-  building: string;
-  floor: number;
-  capacity: number;
-  type: 'lecture' | 'lab' | 'seminar' | 'workshop';
+  _id: string; name: string; building: string; floor: number;
+  capacity: number; type: 'lecture' | 'lab' | 'seminar' | 'workshop';
   department?: { _id: string; name: string; code: string };
-  hasProjector: boolean;
-  hasAC: boolean;
-  isActive: boolean;
+  hasProjector: boolean; hasAC: boolean; isActive: boolean;
 }
+
+const TYPE_STYLES: Record<string, React.CSSProperties> = {
+  lecture:  { background: 'var(--teal-light)',     color: 'var(--teal-dark)' },
+  lab:      { background: '#EEF5F0',               color: '#4A7A5A' },
+  seminar:  { background: 'var(--lavender-light)', color: 'var(--purple-dark)' },
+  workshop: { background: '#FEF3E2',               color: '#B8720A' },
+};
+const STAT_STYLES = [
+  { type: 'lecture',  label: 'Lecture Rooms', color: 'var(--teal-dark)',   bg: 'var(--teal-light)' },
+  { type: 'lab',      label: 'Labs',          color: '#4A7A5A',            bg: '#EEF5F0' },
+  { type: 'seminar',  label: 'Seminar Halls', color: 'var(--purple-dark)', bg: 'var(--lavender-light)' },
+  { type: 'workshop', label: 'Workshops',     color: '#B8720A',            bg: '#FEF3E2' },
+];
+const selectStyle: React.CSSProperties = {
+  padding: '8px 12px', borderRadius: '10px', fontSize: '13px',
+  border: '1.5px solid var(--border)', background: 'var(--cream-light)',
+  color: 'var(--text-primary)', outline: 'none',
+};
 
 export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -21,158 +34,92 @@ export default function AdminRoomsPage() {
   const [filterType, setFilterType] = useState('');
   const [filterBuilding, setFilterBuilding] = useState('');
 
-  useEffect(() => {
-    fetchRooms();
-  }, [filterType, filterBuilding]);
+  useEffect(() => { fetchRooms(); }, [filterType, filterBuilding]);
 
   const fetchRooms = async () => {
     try {
       let url = '/api/rooms?';
       if (filterType) url += `type=${filterType}&`;
       if (filterBuilding) url += `building=${filterBuilding}`;
-
       const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        setRooms(data.rooms || []);
-      }
-    } catch (error) {
-      console.error('Error fetching rooms:', error);
-    } finally {
-      setLoading(false);
-    }
+      if (res.ok) { const d = await res.json(); setRooms(d.rooms || []); }
+    } catch (e) { console.error(e); } finally { setLoading(false); }
   };
 
-  const buildings = [...new Set(rooms.map((r) => r.building))];
-
-  const groupedRooms = rooms.reduce((acc, room) => {
-    const building = room.building || 'Unknown';
-    if (!acc[building]) acc[building] = [];
-    acc[building].push(room);
+  const buildings = [...new Set(rooms.map(r => r.building))];
+  const grouped = rooms.reduce((acc, room) => {
+    const b = room.building || 'Unknown';
+    if (!acc[b]) acc[b] = [];
+    acc[b].push(room);
     return acc;
   }, {} as Record<string, Room[]>);
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'lecture':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'lab':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'seminar':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
-      case 'workshop':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <Loading size="lg" text="Loading rooms..." />;
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Rooms</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage classrooms, labs, and other facilities
-          </p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Rooms</h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>Manage classrooms, labs, and other facilities</p>
         </div>
         <div className="text-right">
-          <span className="text-3xl font-bold text-green-600">{rooms.length}</span>
-          <p className="text-sm text-gray-500">Total Rooms</p>
+          <span className="text-3xl font-bold" style={{ color: 'var(--purple)' }}>{rooms.length}</span>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Rooms</p>
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-blue-600">{rooms.filter((r) => r.type === 'lecture').length}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Lecture Rooms</p>
-        </div>
-        <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-green-600">{rooms.filter((r) => r.type === 'lab').length}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Labs</p>
-        </div>
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-purple-600">{rooms.filter((r) => r.type === 'seminar').length}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Seminar Halls</p>
-        </div>
-        <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
-          <p className="text-2xl font-bold text-orange-600">{rooms.filter((r) => r.type === 'workshop').length}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Workshops</p>
-        </div>
+        {STAT_STYLES.map(({ type, label, color, bg }) => (
+          <div key={type} className="rounded-2xl p-4" style={{ background: bg, border: '1px solid var(--border-light)' }}>
+            <p className="text-2xl font-bold" style={{ color }}>{rooms.filter(r => r.type === type).length}</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{label}</p>
+          </div>
+        ))}
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+      <div className="rounded-2xl p-5" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <select value={filterType} onChange={e => setFilterType(e.target.value)} style={selectStyle}>
             <option value="">All Types</option>
             <option value="lecture">Lecture</option>
             <option value="lab">Lab</option>
             <option value="seminar">Seminar</option>
             <option value="workshop">Workshop</option>
           </select>
-          <select
-            value={filterBuilding}
-            onChange={(e) => setFilterBuilding(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
+          <select value={filterBuilding} onChange={e => setFilterBuilding(e.target.value)} style={selectStyle}>
             <option value="">All Buildings</option>
-            {buildings.map((building) => (
-              <option key={building} value={building}>
-                {building}
-              </option>
-            ))}
+            {buildings.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
         </div>
       </div>
 
       {/* Rooms by Building */}
-      {Object.entries(groupedRooms).map(([building, buildingRooms]) => (
-        <div key={building} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              🏢 {building}
-              <span className="ml-2 text-sm font-normal text-gray-500">
-                ({buildingRooms.length} rooms)
-              </span>
+      {Object.entries(grouped).map(([building, buildingRooms]) => (
+        <div key={building} className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)' }}>
+          <div className="px-6 py-4" style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
+            <h2 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+              {building}
+              <span className="ml-2 font-normal" style={{ color: 'var(--text-muted)' }}>({buildingRooms.length} rooms)</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-            {buildingRooms.map((room) => (
-              <div
-                key={room._id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{room.name}</h3>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(room.type)}`}>
-                    {room.type}
-                  </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+            {buildingRooms.map(room => (
+              <div key={room._id} className="rounded-xl p-4 transition-all hover:-translate-y-0.5"
+                style={{ border: '1px solid var(--border)', background: 'var(--cream-light)', boxShadow: 'var(--shadow-sm)' }}>
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{room.name}</h3>
+                  <span className="px-2 py-0.5 rounded-full text-xs font-semibold capitalize" style={TYPE_STYLES[room.type] || {}}>{room.type}</span>
                 </div>
-                <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                  <p>📍 Floor {room.floor}</p>
-                  <p>👥 Capacity: {room.capacity}</p>
-                  {room.department && <p>🏛️ {room.department.name}</p>}
-                  <div className="flex gap-2 mt-2">
-                    {room.hasProjector && (
-                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">📽️ Projector</span>
-                    )}
-                    {room.hasAC && (
-                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">❄️ AC</span>
-                    )}
+                <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  <p>Floor {room.floor}</p>
+                  <p>Capacity: {room.capacity}</p>
+                  {room.department && <p>{room.department.name}</p>}
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {room.hasProjector && <span className="px-2 py-0.5 rounded-full" style={{ background: 'var(--teal-light)', color: 'var(--teal-dark)' }}>Projector</span>}
+                    {room.hasAC && <span className="px-2 py-0.5 rounded-full" style={{ background: 'var(--lavender-light)', color: 'var(--purple-dark)' }}>AC</span>}
                   </div>
                 </div>
               </div>
@@ -182,8 +129,8 @@ export default function AdminRoomsPage() {
       ))}
 
       {rooms.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
-          <p className="text-gray-500 dark:text-gray-400">No rooms found</p>
+        <div className="text-center py-16 rounded-2xl" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No rooms found</p>
         </div>
       )}
     </div>
