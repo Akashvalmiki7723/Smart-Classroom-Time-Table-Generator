@@ -62,29 +62,29 @@ export default function NewBatchPage() {
       <div className="mb-8">
         <Link
           href="/coordinator/batches"
-          className="text-indigo-600 hover:text-indigo-700 text-sm mb-2 inline-block"
+          className="text-[var(--purple)] hover:opacity-80 text-sm mb-2 inline-block"
         >
           ← Back to Batches
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           Add New Batch
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--text-secondary)]">
           Create a new student batch
         </p>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+      <form onSubmit={handleSubmit} className="bg-[var(--surface)] rounded-xl shadow p-6">
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg mb-6">
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Batch Name *
             </label>
             <div className="flex gap-2">
@@ -106,7 +106,7 @@ export default function NewBatchPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Year *
             </label>
             <Select
@@ -122,7 +122,7 @@ export default function NewBatchPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Semester *
             </label>
             <Select
@@ -139,7 +139,7 @@ export default function NewBatchPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Division *
             </label>
             <Input
@@ -152,7 +152,7 @@ export default function NewBatchPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Student Count *
             </label>
             <Input
@@ -166,7 +166,7 @@ export default function NewBatchPage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Academic Year *
             </label>
             <Select
@@ -181,7 +181,7 @@ export default function NewBatchPage() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-[var(--border-light)]">
           <Link href="/coordinator/batches">
             <Button type="button" variant="secondary">
               Cancel

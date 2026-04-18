@@ -216,10 +216,10 @@ export default function TimeSlotsPage() {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             Time Slot Configuration
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             Define time slots for timetable scheduling
           </p>
         </div>
@@ -237,60 +237,60 @@ export default function TimeSlotsPage() {
 
       {/* Time Slots Table */}
       {timeSlots.length > 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+        <div className="bg-[var(--surface)] rounded-xl shadow overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-50 ">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Slot #
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Duration
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-200">
               {timeSlots.map((slot) => (
                 <tr
                   key={slot._id}
-                  className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 ${
+                  className={`hover:bg-gray-50 /50 ${
                     slot.type === 'break' || slot.type === 'lunch'
-                      ? 'bg-gray-50 dark:bg-gray-700/30'
+                      ? 'bg-gray-50 /30'
                       : ''
                   }`}
                 >
                   <td className="px-6 py-4">
-                    <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="text-lg font-bold text-[var(--purple)]">
                       {slot.slotNumber}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div className="text-sm font-medium text-[var(--text-primary)]">
                       {slot.name}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">
+                    <div className="text-sm text-[var(--text-primary)]">
                       {slot.startTime} - {slot.endTime}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-[var(--text-secondary)]">
                       {slot.duration} min
                     </div>
                   </td>
@@ -324,9 +324,9 @@ export default function TimeSlotsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-12 text-center">
-          <div className="text-6xl mb-4">⏰</div>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-12 text-center">
+          <div className="text-6xl mb-4"></div>
+          <p className="text-[var(--text-muted)] mb-4">
             No time slots configured. You can use default slots or add custom ones.
           </p>
           <div className="flex justify-center gap-4">
@@ -352,14 +352,14 @@ export default function TimeSlotsPage() {
       >
         <form onSubmit={editModal.open ? handleEdit : handleAdd}>
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg mb-4 text-sm">
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 Slot Name *
               </label>
               <Input
@@ -371,7 +371,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 Start Time *
               </label>
               <Input
@@ -383,7 +383,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 End Time *
               </label>
               <Input
@@ -395,7 +395,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 Slot Number *
               </label>
               <Input
@@ -409,7 +409,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 Duration (min) *
               </label>
               <Input
@@ -423,7 +423,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700  mb-1">
                 Type *
               </label>
               <Select
@@ -438,7 +438,7 @@ export default function TimeSlotsPage() {
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex justify-end gap-4 pt-4 border-t border-[var(--border-light)]">
             <Button
               type="button"
               variant="secondary"
@@ -463,7 +463,7 @@ export default function TimeSlotsPage() {
         onClose={() => setDeleteModal({ open: false, slot: null })}
         title="Delete Time Slot"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-[var(--text-secondary)] mb-6">
           Are you sure you want to delete{' '}
           <strong>{deleteModal.slot?.name}</strong>? This action cannot be undone.
         </p>

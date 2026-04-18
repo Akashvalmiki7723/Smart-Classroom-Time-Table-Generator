@@ -14,6 +14,9 @@ export interface IRoom extends Document {
   facilities: string[];
   department?: mongoose.Types.ObjectId;
   isAvailable: boolean;
+  isActive: boolean;
+  hasProjector: boolean;
+  hasAC: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -56,6 +59,18 @@ const RoomSchema = new Schema<IRoom>(
     isAvailable: {
       type: Boolean,
       default: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    hasProjector: {
+      type: Boolean,
+      default: false,
+    },
+    hasAC: {
+      type: Boolean,
+      default: false,
     },
   },
   {

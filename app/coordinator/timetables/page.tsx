@@ -96,10 +96,10 @@ export default function TimetablesPage() {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             Timetables
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             Create and manage timetables
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function TimetablesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
+      <div className="bg-[var(--surface)] rounded-xl shadow p-4 mb-6">
         <div className="flex gap-4">
           <div className="w-48">
             <Select
@@ -133,14 +133,14 @@ export default function TimetablesPage() {
           {timetables.map((timetable) => (
             <div
               key={timetable._id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow p-6"
+              className="bg-[var(--surface)] rounded-xl shadow p-6"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
                     {timetable.name}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-[var(--text-muted)]">
                     {timetable.academicYear} - Sem {timetable.semester}
                   </p>
                 </div>
@@ -150,21 +150,21 @@ export default function TimetablesPage() {
               <div className="space-y-2 mb-4">
                 {timetable.batch && (
                   <div className="flex items-center text-sm">
-                    <span className="text-gray-500 dark:text-gray-400 w-20">Batch:</span>
-                    <span className="text-gray-900 dark:text-white">
+                    <span className="text-[var(--text-muted)] w-20">Batch:</span>
+                    <span className="text-[var(--text-primary)]">
                       {timetable.batch.name}
                     </span>
                   </div>
                 )}
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 dark:text-gray-400 w-20">Entries:</span>
-                  <span className="text-gray-900 dark:text-white">
+                  <span className="text-[var(--text-muted)] w-20">Entries:</span>
+                  <span className="text-[var(--text-primary)]">
                     {timetable.entries?.length || 0} classes
                   </span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 dark:text-gray-400 w-20">Created:</span>
-                  <span className="text-gray-900 dark:text-white">
+                  <span className="text-[var(--text-muted)] w-20">Created:</span>
+                  <span className="text-[var(--text-primary)]">
                     {new Date(timetable.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -172,15 +172,15 @@ export default function TimetablesPage() {
 
               {/* Violations */}
               {(timetable.hardConstraintViolations > 0 || timetable.softConstraintViolations > 0) && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                  <p className="text-xs text-red-600 dark:text-red-400">
-                    ⚠️ {timetable.hardConstraintViolations} hard,{' '}
+                <div className="mb-4 p-3 bg-red-50 rounded-lg">
+                  <p className="text-xs text-red-600">
+                    {timetable.hardConstraintViolations} hard,{' '}
                     {timetable.softConstraintViolations} soft conflicts
                   </p>
                 </div>
               )}
 
-              <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex gap-2 pt-4 border-t border-[var(--border-light)]">
                 <Link href={`/coordinator/timetables/${timetable._id}`} className="flex-1">
                   <Button variant="secondary" className="w-full">
                     View/Edit
@@ -199,9 +199,9 @@ export default function TimetablesPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-12 text-center">
-          <div className="text-6xl mb-4">📅</div>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-12 text-center">
+          <div className="text-6xl mb-4"></div>
+          <p className="text-[var(--text-muted)] mb-4">
             No timetables found. Create your first timetable to get started.
           </p>
           <Link href="/coordinator/timetables/new">
@@ -216,7 +216,7 @@ export default function TimetablesPage() {
         onClose={() => setDeleteModal({ open: false, timetable: null })}
         title="Delete Timetable"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-[var(--text-secondary)] mb-6">
           Are you sure you want to delete{' '}
           <strong>{deleteModal.timetable?.name}</strong>? This action cannot be undone.
         </p>

@@ -121,9 +121,9 @@ export default function TimetableDetailPage() {
           </button>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{timetable.name}</h1>
           <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
-            <span>🏛️ {timetable.department?.name}</span>
-            <span>📅 {timetable.academicYear}</span>
-            <span>📚 Semester {timetable.semester}</span>
+            <span> {timetable.department?.name}</span>
+            <span> {timetable.academicYear}</span>
+            <span> Semester {timetable.semester}</span>
             <span
               className={`px-2 py-1 rounded-full text-xs font-medium ${
                 timetable.status === 'published'
@@ -175,7 +175,7 @@ export default function TimetableDetailPage() {
                       className="border border-gray-200 dark:border-gray-600 px-4 py-4 text-center bg-orange-50 dark:bg-orange-900/20"
                     >
                       <span className="text-orange-600 dark:text-orange-400 font-medium">
-                        🍽️ Lunch Break
+                         Lunch Break
                       </span>
                     </td>
                   ) : (

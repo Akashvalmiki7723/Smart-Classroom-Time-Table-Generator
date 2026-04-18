@@ -73,8 +73,8 @@ export default function FacultySchedulePage() {
       {/* Page Header */}
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Schedule</h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">My Schedule</h1>
+          <p className="text-[var(--text-secondary)]">
             {getTotalClasses()} classes this week
           </p>
         </div>
@@ -98,18 +98,18 @@ export default function FacultySchedulePage() {
 
       {viewMode === 'calendar' ? (
         /* Calendar View */
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+        <div className="bg-[var(--surface)] rounded-xl shadow overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50 dark:bg-gray-700">
-                  <th className="border border-gray-200 dark:border-gray-600 p-3 text-left text-sm font-medium text-gray-500 dark:text-gray-300 w-24">
+                <tr className="bg-gray-50 ">
+                  <th className="border border-gray-200  p-3 text-left text-sm font-medium text-gray-500  w-24">
                     Time
                   </th>
                   {DAYS.map((day, index) => (
                     <th
                       key={day}
-                      className="border border-gray-200 dark:border-gray-600 p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-300"
+                      className="border border-gray-200  p-3 text-center text-sm font-medium text-gray-500 "
                     >
                       <div>{day}</div>
                       <div className="text-xs font-normal">
@@ -122,11 +122,11 @@ export default function FacultySchedulePage() {
               <tbody>
                 {timeSlots.map((slot) => (
                   <tr key={slot._id}>
-                    <td className="border border-gray-200 dark:border-gray-600 p-3 bg-gray-50 dark:bg-gray-700">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="border border-gray-200  p-3 bg-gray-50 ">
+                      <div className="text-sm font-medium text-[var(--text-primary)]">
                         {slot.name}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <div className="text-xs text-[var(--text-muted)]">
                         {slot.startTime} - {slot.endTime}
                       </div>
                     </td>
@@ -135,33 +135,33 @@ export default function FacultySchedulePage() {
                       return (
                         <td
                           key={dayIndex}
-                          className="border border-gray-200 dark:border-gray-600 p-2 min-w-[150px]"
+                          className="border border-gray-200  p-2 min-w-[150px]"
                         >
                           {entry ? (
                             <div
                               className={`p-2 rounded-lg text-xs ${
                                 entry.type === 'practical'
-                                  ? 'bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800'
-                                  : 'bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800'
+                                  ? 'bg-green-100 border border-green-200'
+                                  : 'bg-indigo-100  border border-indigo-200'
                               }`}
                             >
-                              <div className="font-semibold text-gray-900 dark:text-white mb-1">
+                              <div className="font-semibold text-[var(--text-primary)] mb-1">
                                 {entry.subject?.code || 'N/A'}
                               </div>
-                              <div className="text-gray-600 dark:text-gray-400 truncate">
+                              <div className="text-[var(--text-secondary)] truncate">
                                 {entry.subject?.name || 'Unknown'}
                               </div>
                               <div className="mt-1 flex items-center gap-1">
-                                <span className="text-gray-500 dark:text-gray-500">
+                                <span className="text-gray-500 ">
                                   📍 {entry.room?.name || 'TBA'}
                                 </span>
                               </div>
-                              <div className="text-gray-500 dark:text-gray-500">
-                                👥 {entry.batch?.name || 'N/A'}
+                              <div className="text-gray-500 ">
+                                {entry.batch?.name || 'N/A'}
                               </div>
                             </div>
                           ) : (
-                            <div className="text-center text-gray-400 dark:text-gray-600 py-4">
+                            <div className="text-center text-gray-400 py-4">
                               -
                             </div>
                           )}
@@ -180,26 +180,26 @@ export default function FacultySchedulePage() {
           {DAYS.map((day, dayIndex) => {
             const daySchedule = schedule[dayIndex] || [];
             return (
-              <div key={day} className="bg-white dark:bg-gray-800 rounded-xl shadow">
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{day}</h3>
+              <div key={day} className="bg-[var(--surface)] rounded-xl shadow">
+                <div className="p-4 border-b border-[var(--border-light)] flex justify-between items-center">
+                  <h3 className="font-semibold text-[var(--text-primary)]">{day}</h3>
                   <Badge variant="info">{daySchedule.length} classes</Badge>
                 </div>
 
                 {daySchedule.length === 0 ? (
-                  <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                  <div className="p-8 text-center text-[var(--text-muted)]">
                     No classes scheduled
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <div className="divide-y divide-gray-200">
                     {daySchedule.sort((a, b) => a.slot - b.slot).map((entry, index) => (
-                      <div key={index} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                      <div key={index} className="p-4 hover:bg-gray-50 /50">
                         <div className="flex items-center gap-4">
                           <div className="flex-shrink-0 w-24 text-center">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            <div className="text-sm font-medium text-[var(--text-primary)]">
                               {entry.startTime}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                            <div className="text-xs text-[var(--text-muted)]">
                               {entry.endTime}
                             </div>
                           </div>
@@ -212,7 +212,7 @@ export default function FacultySchedulePage() {
 
                           <div className="flex-grow">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="font-semibold text-gray-900 dark:text-white">
+                              <span className="font-semibold text-[var(--text-primary)]">
                                 {entry.subject?.code || 'N/A'}
                               </span>
                               <Badge
@@ -222,26 +222,26 @@ export default function FacultySchedulePage() {
                                 {entry.type}
                               </Badge>
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                            <div className="text-sm text-[var(--text-secondary)]">
                               {entry.subject?.name || 'Unknown Subject'}
                             </div>
                           </div>
 
                           <div className="text-right">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            <div className="text-sm font-medium text-[var(--text-primary)]">
                               {entry.room?.name || 'TBA'}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                            <div className="text-xs text-[var(--text-muted)]">
                               {entry.room?.building}
                               {entry.room?.floor && `, Floor ${entry.room.floor}`}
                             </div>
                           </div>
 
                           <div className="text-right min-w-[100px]">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            <div className="text-sm font-medium text-[var(--text-primary)]">
                               {entry.batch?.name || 'N/A'}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                            <div className="text-xs text-[var(--text-muted)]">
                               Year {entry.batch?.year}, Sem {entry.batch?.semester}
                             </div>
                           </div>
@@ -257,16 +257,16 @@ export default function FacultySchedulePage() {
       )}
 
       {/* Legend */}
-      <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-        <h4 className="font-medium text-gray-900 dark:text-white mb-3">Legend</h4>
+      <div className="mt-6 bg-[var(--surface)] rounded-xl shadow p-4">
+        <h4 className="font-medium text-[var(--text-primary)] mb-3">Legend</h4>
         <div className="flex gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800"></div>
-            <span className="text-sm text-gray-600 dark:text-gray-400">Theory Class</span>
+            <div className="w-4 h-4 rounded bg-indigo-100  border border-indigo-200"></div>
+            <span className="text-sm text-[var(--text-secondary)]">Theory Class</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800"></div>
-            <span className="text-sm text-gray-600 dark:text-gray-400">Practical/Lab</span>
+            <div className="w-4 h-4 rounded bg-green-100 border border-green-200"></div>
+            <span className="text-sm text-[var(--text-secondary)]">Practical/Lab</span>
           </div>
         </div>
       </div>

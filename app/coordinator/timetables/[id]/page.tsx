@@ -378,7 +378,7 @@ export default function TimetableDetailPage({ params }: Props) {
   if (!timetable) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 dark:text-gray-400">Timetable not found</p>
+        <p className="text-[var(--text-muted)]">Timetable not found</p>
         <Link href="/coordinator/timetables">
           <Button className="mt-4">Back to Timetables</Button>
         </Link>
@@ -395,14 +395,14 @@ export default function TimetableDetailPage({ params }: Props) {
         <div>
           <Link
             href="/coordinator/timetables"
-            className="text-indigo-600 hover:text-indigo-700 text-sm mb-2 inline-block"
+            className="text-[var(--purple)] hover:text-indigo-700 text-sm mb-2 inline-block"
           >
             ← Back to Timetables
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             {timetable.name}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             {timetable.batch?.name} | {timetable.academicYear} - Semester {timetable.semester}
           </p>
         </div>
@@ -411,10 +411,10 @@ export default function TimetableDetailPage({ params }: Props) {
           {canEdit && (
             <>
               <Button variant="secondary" onClick={() => setGenerateModal(true)}>
-                🤖 Auto Generate
+                Auto Generate
               </Button>
               <Button variant="secondary" onClick={handleValidate} disabled={validating}>
-                {validating ? 'Validating...' : '✓ Validate'}
+                {validating ? 'Validating...' : ' Validate'}
               </Button>
             </>
           )}
@@ -428,30 +428,30 @@ export default function TimetableDetailPage({ params }: Props) {
 
       {/* Rejection Reason */}
       {timetable.status === 'rejected' && timetable.rejectionReason && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
-          <h3 className="font-semibold text-red-800 dark:text-red-300 mb-1">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+          <h3 className="font-semibold text-red-800 mb-1">
             Rejection Reason
           </h3>
-          <p className="text-red-700 dark:text-red-400">{timetable.rejectionReason}</p>
+          <p className="text-red-700">{timetable.rejectionReason}</p>
         </div>
       )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total Classes</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-4">
+          <p className="text-sm text-[var(--text-muted)]">Total Classes</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">
             {timetable.entries.length}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Students</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-4">
+          <p className="text-sm text-[var(--text-muted)]">Students</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">
             {timetable.batch?.studentCount || 0}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Optimization Score</p>
+        <div className="bg-[var(--surface)] rounded-xl shadow p-4">
+          <p className="text-sm text-[var(--text-muted)]">Optimization Score</p>
           <p className={`text-2xl font-bold ${
             (timetable.optimizationScore ?? 0) >= 8 ? 'text-green-600' : 
             (timetable.optimizationScore ?? 0) >= 5 ? 'text-amber-600' : 'text-red-600'
@@ -459,14 +459,14 @@ export default function TimetableDetailPage({ params }: Props) {
             {timetable.optimizationScore?.toFixed(1) ?? 'N/A'}/10
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Hard Conflicts</p>
+        <div className="bg-[var(--surface)] rounded-xl shadow p-4">
+          <p className="text-sm text-[var(--text-muted)]">Hard Conflicts</p>
           <p className={`text-2xl font-bold ${timetable.hardConstraintViolations > 0 ? 'text-red-600' : 'text-green-600'}`}>
             {timetable.hardConstraintViolations}
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Soft Conflicts</p>
+        <div className="bg-[var(--surface)] rounded-xl shadow p-4">
+          <p className="text-sm text-[var(--text-muted)]">Soft Conflicts</p>
           <p className={`text-2xl font-bold ${timetable.softConstraintViolations > 0 ? 'text-amber-600' : 'text-green-600'}`}>
             {timetable.softConstraintViolations}
           </p>
@@ -475,25 +475,25 @@ export default function TimetableDetailPage({ params }: Props) {
 
       {/* Generation Stats */}
       {generationStats && (
-        <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl p-4 mb-6">
-          <h3 className="font-semibold text-indigo-800 dark:text-indigo-300 mb-2">
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6">
+          <h3 className="font-semibold text-indigo-800 mb-2">
             Last Generation Results
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <span className="text-indigo-600 dark:text-indigo-400">Classes Placed:</span>{' '}
+              <span className="text-[var(--purple)]">Classes Placed:</span>{' '}
               <span className="font-medium">{generationStats.placedClasses}/{generationStats.totalClasses}</span>
             </div>
             <div>
-              <span className="text-indigo-600 dark:text-indigo-400">Unplaced:</span>{' '}
+              <span className="text-[var(--purple)]">Unplaced:</span>{' '}
               <span className="font-medium">{generationStats.unplacedClasses}</span>
             </div>
             <div>
-              <span className="text-indigo-600 dark:text-indigo-400">Iterations:</span>{' '}
+              <span className="text-[var(--purple)]">Iterations:</span>{' '}
               <span className="font-medium">{generationStats.iterations}</span>
             </div>
             <div>
-              <span className="text-indigo-600 dark:text-indigo-400">Time:</span>{' '}
+              <span className="text-[var(--purple)]">Time:</span>{' '}
               <span className="font-medium">{generationStats.timeTaken}ms</span>
             </div>
           </div>
@@ -502,13 +502,13 @@ export default function TimetableDetailPage({ params }: Props) {
 
       {/* Conflicts Warning */}
       {conflicts.length > 0 && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 mb-6">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="font-semibold text-amber-800 dark:text-amber-300">
+              <h3 className="font-semibold text-amber-800">
                 {conflicts.filter(c => c.severity === 'hard').length} Hard Conflicts, {conflicts.filter(c => c.severity === 'soft').length} Soft Conflicts
               </h3>
-              <p className="text-sm text-amber-600 dark:text-amber-400">
+              <p className="text-sm text-amber-600">
                 Review and resolve conflicts before submitting for approval.
               </p>
             </div>
@@ -520,18 +520,18 @@ export default function TimetableDetailPage({ params }: Props) {
       )}
 
       {/* Timetable Grid */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+      <div className="bg-[var(--surface)] rounded-xl shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-50 dark:bg-gray-700">
-                <th className="border border-gray-200 dark:border-gray-600 p-3 text-left text-sm font-medium text-gray-500 dark:text-gray-300">
+              <tr className="bg-gray-50">
+                <th className="border border-gray-200 p-3 text-left text-sm font-medium text-gray-500">
                   Time Slot
                 </th>
                 {DAYS.map((day) => (
                   <th
                     key={day}
-                    className="border border-gray-200 dark:border-gray-600 p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-300"
+                    className="border border-gray-200 p-3 text-center text-sm font-medium text-gray-500"
                   >
                     {day}
                   </th>
@@ -541,11 +541,11 @@ export default function TimetableDetailPage({ params }: Props) {
             <tbody>
               {timeSlots.map((slot) => (
                 <tr key={slot._id}>
-                  <td className="border border-gray-200 dark:border-gray-600 p-3 bg-gray-50 dark:bg-gray-700">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                  <td className="border border-gray-200 p-3 bg-gray-50">
+                    <div className="text-sm font-medium text-[var(--text-primary)]">
                       {slot.name}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <div className="text-xs text-[var(--text-muted)]">
                       {slot.startTime} - {slot.endTime}
                     </div>
                   </td>
@@ -554,21 +554,21 @@ export default function TimetableDetailPage({ params }: Props) {
                     return (
                       <td
                         key={dayIndex}
-                        className="border border-gray-200 dark:border-gray-600 p-2 min-w-[140px]"
+                        className="border border-gray-200 p-2 min-w-[140px]"
                       >
                         {entry ? (
                           <div className={`p-2 rounded-lg text-xs ${
                             entry.type === 'practical'
-                              ? 'bg-green-100 dark:bg-green-900/30'
-                              : 'bg-blue-100 dark:bg-blue-900/30'
+                              ? 'bg-green-100'
+                              : 'bg-blue-100'
                           }`}>
-                            <div className="font-semibold text-gray-900 dark:text-white">
+                            <div className="font-semibold text-[var(--text-primary)]">
                               {typeof entry.subject === 'object' ? entry.subject.code : subjects.find(s => s._id === entry.subject)?.code || 'N/A'}
                             </div>
-                            <div className="text-gray-600 dark:text-gray-400">
+                            <div className="text-[var(--text-secondary)]">
                               {typeof entry.faculty === 'object' ? entry.faculty.name : faculty.find(f => f._id === entry.faculty)?.name || 'N/A'}
                             </div>
-                            <div className="text-gray-500 dark:text-gray-500">
+                            <div className="text-gray-500">
                               {typeof entry.room === 'object' ? entry.room.name : rooms.find(r => r._id === entry.room)?.name || 'N/A'}
                             </div>
                             {canEdit && (
@@ -583,12 +583,12 @@ export default function TimetableDetailPage({ params }: Props) {
                         ) : canEdit ? (
                           <button
                             onClick={() => setAddModal({ open: true, day: dayIndex, slot: slot.slotNumber })}
-                            className="w-full h-full min-h-[60px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors flex items-center justify-center text-gray-400 hover:text-indigo-600"
+                            className="w-full h-full min-h-[60px] border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors flex items-center justify-center text-gray-400 hover:text-[var(--purple)]"
                           >
                             + Add
                           </button>
                         ) : (
-                          <div className="text-center text-gray-400 dark:text-gray-600 py-4">
+                          <div className="text-center text-gray-400 py-4">
                             -
                           </div>
                         )}
@@ -603,9 +603,9 @@ export default function TimetableDetailPage({ params }: Props) {
       </div>
 
       {timeSlots.length === 0 && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 mt-6">
-          <p className="text-amber-700 dark:text-amber-400">
-            ⚠️ No time slots configured.{' '}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-6">
+          <p className="text-amber-700">
+            No time slots configured.{' '}
             <Link href="/coordinator/timeslots" className="underline">
               Configure time slots first
             </Link>
@@ -630,14 +630,14 @@ export default function TimetableDetailPage({ params }: Props) {
           }}
         >
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg mb-4 text-sm">
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
               {error}
             </div>
           )}
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subject *
               </label>
               <Select
@@ -655,7 +655,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Faculty *
               </label>
               <Select
@@ -673,7 +673,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Room *
               </label>
               <Select
@@ -691,7 +691,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Class Type
               </label>
               <Select
@@ -704,7 +704,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-[var(--border-light)]">
             <Button
               type="button"
               variant="secondary"
@@ -729,7 +729,7 @@ export default function TimetableDetailPage({ params }: Props) {
         onClose={() => setSubmitModal(false)}
         title="Submit for Approval"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-[var(--text-secondary)] mb-6">
           Are you sure you want to submit this timetable for HOD approval?
           You won&apos;t be able to edit it until it&apos;s approved or rejected.
         </p>
@@ -750,21 +750,21 @@ export default function TimetableDetailPage({ params }: Props) {
         title="Auto Generate Timetable"
       >
         <div className="space-y-4">
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             Configure generation preferences and let the algorithm create an optimized timetable.
           </p>
 
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-4">
-            <h4 className="font-medium text-gray-900 dark:text-white">Generation Options</h4>
+          <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+            <h4 className="font-medium text-[var(--text-primary)]">Generation Options</h4>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Max Gaps Per Day
               </label>
               <Select
@@ -790,9 +790,9 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     preferConsecutiveLectures: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
+                <span className="text-sm text-gray-700">
                   Prefer consecutive lectures
                 </span>
               </label>
@@ -805,9 +805,9 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     balanceFacultyLoad: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
+                <span className="text-sm text-gray-700">
                   Balance faculty workload
                 </span>
               </label>
@@ -820,28 +820,28 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     prioritizePreferredSlots: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
+                <span className="text-sm text-gray-700">
                   Prioritize faculty preferred slots
                 </span>
               </label>
             </div>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
-            <p className="text-sm text-amber-700 dark:text-amber-400">
-              ⚠️ This will replace any existing entries in the timetable.
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-sm text-amber-700">
+              This will replace any existing entries in the timetable.
             </p>
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-4 mt-6 pt-4 border-t border-[var(--border-light)]">
           <Button variant="secondary" onClick={() => setGenerateModal(false)}>
             Cancel
           </Button>
           <Button onClick={handleAutoGenerate} disabled={generating}>
-            {generating ? 'Generating...' : '🤖 Generate Timetable'}
+            {generating ? 'Generating...' : 'Generate Timetable'}
           </Button>
         </div>
       </Modal>
@@ -855,7 +855,7 @@ export default function TimetableDetailPage({ params }: Props) {
         <div className="space-y-4 max-h-[60vh] overflow-y-auto">
           {conflicts.filter(c => c.severity === 'hard').length > 0 && (
             <div>
-              <h4 className="font-semibold text-red-700 dark:text-red-400 mb-2 flex items-center gap-2">
+              <h4 className="font-semibold text-red-700 mb-2 flex items-center gap-2">
                 <span className="w-3 h-3 bg-red-500 rounded-full"></span>
                 Hard Conflicts ({conflicts.filter(c => c.severity === 'hard').length})
               </h4>
@@ -865,19 +865,19 @@ export default function TimetableDetailPage({ params }: Props) {
                   .map((conflict, index) => (
                     <div
                       key={index}
-                      className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3"
+                      className="bg-red-50 border border-red-200 rounded-lg p-3"
                     >
                       <div className="flex items-start gap-2">
                         <span className="text-red-500">✕</span>
                         <div>
-                          <p className="text-sm font-medium text-red-800 dark:text-red-300">
+                          <p className="text-sm font-medium text-red-800">
                             {conflict.type.replace('_', ' ').toUpperCase()}
                           </p>
-                          <p className="text-sm text-red-600 dark:text-red-400">
+                          <p className="text-sm text-red-600">
                             {conflict.message}
                           </p>
                           {conflict.day !== undefined && (
-                            <p className="text-xs text-red-500 dark:text-red-500 mt-1">
+                            <p className="text-xs text-red-500 mt-1">
                               {DAYS[conflict.day]} - Slot {conflict.slot}
                             </p>
                           )}
@@ -891,7 +891,7 @@ export default function TimetableDetailPage({ params }: Props) {
 
           {conflicts.filter(c => c.severity === 'soft').length > 0 && (
             <div>
-              <h4 className="font-semibold text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
+              <h4 className="font-semibold text-amber-700 mb-2 flex items-center gap-2">
                 <span className="w-3 h-3 bg-amber-500 rounded-full"></span>
                 Soft Conflicts / Warnings ({conflicts.filter(c => c.severity === 'soft').length})
               </h4>
@@ -901,19 +901,19 @@ export default function TimetableDetailPage({ params }: Props) {
                   .map((conflict, index) => (
                     <div
                       key={index}
-                      className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3"
+                      className="bg-amber-50 border border-amber-200 rounded-lg p-3"
                     >
                       <div className="flex items-start gap-2">
-                        <span className="text-amber-500">⚠</span>
+                        <span className="text-amber-500">!</span>
                         <div>
-                          <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
+                          <p className="text-sm font-medium text-amber-800">
                             {conflict.type.replace('_', ' ').toUpperCase()}
                           </p>
-                          <p className="text-sm text-amber-600 dark:text-amber-400">
+                          <p className="text-sm text-amber-600">
                             {conflict.message}
                           </p>
                           {conflict.day !== undefined && (
-                            <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">
+                            <p className="text-xs text-amber-500 mt-1">
                               {DAYS[conflict.day]}
                             </p>
                           )}
@@ -927,15 +927,15 @@ export default function TimetableDetailPage({ params }: Props) {
 
           {conflicts.length === 0 && (
             <div className="text-center py-8">
-              <div className="text-4xl mb-2">✓</div>
-              <p className="text-green-600 dark:text-green-400 font-medium">
+              <div className="text-4xl mb-2"></div>
+              <p className="text-green-600 font-medium">
                 No conflicts found!
               </p>
             </div>
           )}
         </div>
 
-        <div className="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end mt-6 pt-4 border-t border-[var(--border-light)]">
           <Button onClick={() => setConflictsModal(false)}>
             Close
           </Button>

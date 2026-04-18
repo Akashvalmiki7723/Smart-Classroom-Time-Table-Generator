@@ -101,44 +101,44 @@ export default function NewTimetablePage() {
       <div className="mb-8">
         <Link
           href="/coordinator/timetables"
-          className="text-indigo-600 hover:text-indigo-700 text-sm mb-2 inline-block"
+          className="text-[var(--purple)] hover:opacity-80 text-sm mb-2 inline-block"
         >
           ← Back to Timetables
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           Create New Timetable
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--text-secondary)]">
           Set up basic timetable information
         </p>
       </div>
 
       {/* Steps Indicator */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
+      <div className="bg-[var(--surface)] rounded-xl shadow p-4 mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+            <div className="w-8 h-8 bg-[var(--purple)] text-white rounded-full flex items-center justify-center font-bold">
               1
             </div>
-            <span className="ml-2 text-sm font-medium text-indigo-600 dark:text-indigo-400">
+            <span className="ml-2 text-sm font-medium text-[var(--purple)]">
               Basic Info
             </span>
           </div>
-          <div className="flex-1 h-1 mx-4 bg-gray-200 dark:bg-gray-700" />
+          <div className="flex-1 h-1 mx-4 bg-gray-200 " />
           <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 rounded-full flex items-center justify-center font-bold">
+            <div className="w-8 h-8 bg-gray-300 text-[var(--text-secondary)] rounded-full flex items-center justify-center font-bold">
               2
             </div>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+            <span className="ml-2 text-sm text-[var(--text-muted)]">
               Add Classes
             </span>
           </div>
-          <div className="flex-1 h-1 mx-4 bg-gray-200 dark:bg-gray-700" />
+          <div className="flex-1 h-1 mx-4 bg-gray-200 " />
           <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 rounded-full flex items-center justify-center font-bold">
+            <div className="w-8 h-8 bg-gray-300 text-[var(--text-secondary)] rounded-full flex items-center justify-center font-bold">
               3
             </div>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+            <span className="ml-2 text-sm text-[var(--text-muted)]">
               Review & Submit
             </span>
           </div>
@@ -146,16 +146,16 @@ export default function NewTimetablePage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+      <form onSubmit={handleSubmit} className="bg-[var(--surface)] rounded-xl shadow p-6">
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg mb-6">
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Select Batch *
             </label>
             <Select
@@ -171,8 +171,8 @@ export default function NewTimetablePage() {
               ))}
             </Select>
             {batches.length === 0 && (
-              <p className="mt-2 text-sm text-amber-600 dark:text-amber-400">
-                ⚠️ No active batches found.{' '}
+              <p className="mt-2 text-sm text-amber-600">
+                No active batches found.{' '}
                 <Link href="/coordinator/batches/new" className="underline">
                   Create a batch first
                 </Link>
@@ -181,7 +181,7 @@ export default function NewTimetablePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700  mb-2">
               Timetable Name *
             </label>
             <Input
@@ -194,7 +194,7 @@ export default function NewTimetablePage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700  mb-2">
                 Academic Year *
               </label>
               <Select
@@ -209,7 +209,7 @@ export default function NewTimetablePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700  mb-2">
                 Semester *
               </label>
               <Select
@@ -227,7 +227,7 @@ export default function NewTimetablePage() {
           </div>
         </div>
 
-        <div className="flex justify-between gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between gap-4 mt-8 pt-6 border-t border-[var(--border-light)]">
           <Link href="/coordinator/timetables">
             <Button type="button" variant="secondary">
               Cancel

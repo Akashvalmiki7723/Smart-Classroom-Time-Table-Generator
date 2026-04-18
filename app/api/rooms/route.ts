@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const building = searchParams.get('building');
 
-    const filter: any = { isActive: true };
+    const filter: any = { $or: [{ isAvailable: true }, { isActive: true }] };
     if (department) filter.department = department;
     if (type) filter.type = type;
     if (building) filter.building = building;

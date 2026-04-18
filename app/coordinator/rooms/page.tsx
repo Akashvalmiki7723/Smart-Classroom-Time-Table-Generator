@@ -102,10 +102,10 @@ export default function RoomsPage() {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             Room Management
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             Manage classrooms and labs for scheduling
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function RoomsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
+      <div className="bg-[var(--surface)] rounded-xl shadow p-4 mb-6">
         <form onSubmit={handleSearch} className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-[200px]">
             <Input
@@ -159,14 +159,14 @@ export default function RoomsPage() {
           {rooms.map((room) => (
             <div
               key={room._id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow p-6"
+              className="bg-[var(--surface)] rounded-xl shadow p-6"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
                     {room.name}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-[var(--text-muted)]">
                     {room.building}, Floor {room.floor}
                   </p>
                 </div>
@@ -175,21 +175,21 @@ export default function RoomsPage() {
 
               <div className="space-y-2 mb-4">
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 dark:text-gray-400 w-24">Capacity:</span>
-                  <span className="text-gray-900 dark:text-white font-medium">
+                  <span className="text-[var(--text-muted)] w-24">Capacity:</span>
+                  <span className="text-[var(--text-primary)] font-medium">
                     {room.capacity} seats
                   </span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-500 dark:text-gray-400 w-24">Status:</span>
+                  <span className="text-[var(--text-muted)] w-24">Status:</span>
                   <Badge variant={room.isAvailable ? 'success' : 'danger'}>
                     {room.isAvailable ? 'Available' : 'Unavailable'}
                   </Badge>
                 </div>
                 {room.department && (
                   <div className="flex items-center text-sm">
-                    <span className="text-gray-500 dark:text-gray-400 w-24">Dept:</span>
-                    <span className="text-gray-900 dark:text-white">
+                    <span className="text-[var(--text-muted)] w-24">Dept:</span>
+                    <span className="text-[var(--text-primary)]">
                       {room.department.code}
                     </span>
                   </div>
@@ -198,14 +198,14 @@ export default function RoomsPage() {
 
               {room.facilities.length > 0 && (
                 <div className="mb-4">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  <p className="text-xs text-[var(--text-muted)] mb-2">
                     Facilities:
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {room.facilities.map((facility) => (
                       <span
                         key={facility}
-                        className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded"
+                        className="px-2 py-0.5 bg-gray-100  text-gray-600  text-xs rounded"
                       >
                         {facility}
                       </span>
@@ -214,7 +214,7 @@ export default function RoomsPage() {
                 </div>
               )}
 
-              <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex gap-2 pt-4 border-t border-[var(--border-light)]">
                 <Link href={`/coordinator/rooms/${room._id}/edit`} className="flex-1">
                   <Button variant="secondary" className="w-full">
                     Edit
@@ -231,8 +231,8 @@ export default function RoomsPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-12 text-center">
+          <p className="text-[var(--text-muted)] mb-4">
             No rooms found. Start by adding a room.
           </p>
           <Link href="/coordinator/rooms/new">
@@ -247,7 +247,7 @@ export default function RoomsPage() {
         onClose={() => setDeleteModal({ open: false, room: null })}
         title="Delete Room"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-[var(--text-secondary)] mb-6">
           Are you sure you want to delete{' '}
           <strong>{deleteModal.room?.name}</strong>? This action cannot be undone.
         </p>

@@ -90,10 +90,10 @@ export default function BatchesPage() {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">
             Batch Management
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[var(--text-secondary)]">
             Manage student batches for scheduling
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function BatchesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
+      <div className="bg-[var(--surface)] rounded-xl shadow p-4 mb-6">
         <form onSubmit={handleSearch} className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-[200px]">
             <Input
@@ -143,58 +143,58 @@ export default function BatchesPage() {
 
       {/* Batches Table */}
       {batches.length > 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+        <div className="bg-[var(--surface)] rounded-xl shadow overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-50 ">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Batch Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Year / Semester
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Division
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Students
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Academic Year
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500  uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-gray-200">
               {batches.map((batch) => (
-                <tr key={batch._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr key={batch._id} className="hover:bg-gray-50 /50">
                   <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div className="text-sm font-medium text-[var(--text-primary)]">
                       {batch.name}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">
+                    <div className="text-sm text-[var(--text-primary)]">
                       Year {batch.year} / Sem {batch.semester}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">
+                    <div className="text-sm text-[var(--text-primary)]">
                       {batch.division}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 dark:text-white">
+                    <div className="text-sm text-[var(--text-primary)]">
                       {batch.studentCount}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-[var(--text-secondary)]">
                       {batch.academicYear}
                     </div>
                   </td>
@@ -225,8 +225,8 @@ export default function BatchesPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-[var(--surface)] rounded-xl shadow p-12 text-center">
+          <p className="text-[var(--text-muted)] mb-4">
             No batches found. Start by adding a batch.
           </p>
           <Link href="/coordinator/batches/new">
@@ -241,7 +241,7 @@ export default function BatchesPage() {
         onClose={() => setDeleteModal({ open: false, batch: null })}
         title="Delete Batch"
       >
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-[var(--text-secondary)] mb-6">
           Are you sure you want to delete{' '}
           <strong>{deleteModal.batch?.name}</strong>? This action cannot be undone.
         </p>

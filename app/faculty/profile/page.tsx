@@ -185,7 +185,7 @@ export default function FacultyProfilePage() {
                 <p className="text-sm text-muted-foreground">Employment Status</p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-primary">📚</p>
+                <p className="text-2xl font-bold text-primary"></p>
                 <p className="text-sm text-muted-foreground">View subjects in Schedule</p>
               </div>
             </div>

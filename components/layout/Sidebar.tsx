@@ -53,19 +53,19 @@ const NAV_ITEMS: Record<string, { href: string; label: string; icon: React.React
     { href: '/coordinator/dashboard',   label: 'Dashboard',   icon: <LayoutDashboard className="w-4 h-4" /> },
     { href: '/coordinator/timetables',  label: 'Timetables',  icon: <CalendarDays className="w-4 h-4" /> },
     { href: '/coordinator/rooms',       label: 'Rooms',       icon: <DoorOpen className="w-4 h-4" /> },
-    { href: '/coordinator/time-slots',  label: 'Time Slots',  icon: <Clock className="w-4 h-4" /> },
+    { href: '/coordinator/timeslots',   label: 'Time Slots',  icon: <Clock className="w-4 h-4" /> },
     { href: '/coordinator/batches',     label: 'Batches',     icon: <GraduationCap className="w-4 h-4" /> },
   ],
   faculty: [
     { href: '/faculty/dashboard',   label: 'Dashboard',   icon: <LayoutDashboard className="w-4 h-4" /> },
     { href: '/faculty/schedule',    label: 'My Schedule',  icon: <CalendarDays className="w-4 h-4" /> },
     { href: '/faculty/subjects',    label: 'Subjects',     icon: <BookOpen className="w-4 h-4" /> },
-    { href: '/faculty/batches',     label: 'My Batches',   icon: <GraduationCap className="w-4 h-4" /> },
+    { href: '/faculty/leaves',      label: 'Leave Mgmt',   icon: <GraduationCap className="w-4 h-4" /> },
   ],
   student: [
     { href: '/student/dashboard',   label: 'Dashboard',   icon: <LayoutDashboard className="w-4 h-4" /> },
-    { href: '/student/schedule',    label: 'My Schedule',  icon: <CalendarDays className="w-4 h-4" /> },
-    { href: '/student/subjects',    label: 'Subjects',     icon: <BookOpen className="w-4 h-4" /> },
+    { href: '/student/timetable',   label: 'My Timetable', icon: <CalendarDays className="w-4 h-4" /> },
+    { href: '/student/rooms',       label: 'Classrooms',   icon: <DoorOpen className="w-4 h-4" /> },
   ],
 };
 
@@ -219,3 +219,5 @@ export function Sidebar({ userRole, userName = 'User', userEmail = '' }: Sidebar
     </motion.div>
   );
 }
+
+export default Sidebar;

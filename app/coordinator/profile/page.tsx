@@ -165,17 +165,17 @@ export default function CoordinatorProfilePage() {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-4">
               <div className="p-4 bg-muted/50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-primary">📅</p>
+                <p className="text-2xl font-bold text-primary"></p>
                 <p className="text-sm font-medium mt-2">Timetable Creation</p>
                 <p className="text-xs text-muted-foreground">Create & manage schedules</p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-primary">🏫</p>
+                <p className="text-2xl font-bold text-primary"></p>
                 <p className="text-sm font-medium mt-2">Room Management</p>
                 <p className="text-xs text-muted-foreground">Allocate classrooms</p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-primary">⚠️</p>
+                <p className="text-2xl font-bold text-primary"></p>
                 <p className="text-sm font-medium mt-2">Conflict Resolution</p>
                 <p className="text-xs text-muted-foreground">Handle scheduling conflicts</p>
               </div>

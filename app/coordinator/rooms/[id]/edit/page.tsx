@@ -115,29 +115,29 @@ export default function EditRoomPage({ params }: Props) {
       <div className="mb-8">
         <Link
           href="/coordinator/rooms"
-          className="text-indigo-600 hover:text-indigo-700 text-sm mb-2 inline-block"
+          className="text-[var(--purple)] hover:text-indigo-700 text-sm mb-2 inline-block"
         >
           ← Back to Rooms
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           Edit Room
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[var(--text-secondary)]">
           Update room information
         </p>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+      <form onSubmit={handleSubmit} className="bg-[var(--surface)] rounded-xl shadow p-6">
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg mb-6">
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Room Name/Number *
             </label>
             <Input
@@ -149,7 +149,7 @@ export default function EditRoomPage({ params }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Building *
             </label>
             <Input
@@ -161,7 +161,7 @@ export default function EditRoomPage({ params }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Floor *
             </label>
             <Input
@@ -173,7 +173,7 @@ export default function EditRoomPage({ params }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Type *
             </label>
             <Select
@@ -188,7 +188,7 @@ export default function EditRoomPage({ params }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Capacity (seats) *
             </label>
             <Input
@@ -207,9 +207,9 @@ export default function EditRoomPage({ params }: Props) {
                 type="checkbox"
                 checked={formData.isAvailable}
                 onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                className="w-4 h-4 text-[var(--purple)] border-gray-300 rounded focus:ring-[var(--purple)]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <span className="ml-2 text-sm text-gray-700">
                 Available for scheduling
               </span>
             </label>
@@ -218,9 +218,9 @@ export default function EditRoomPage({ params }: Props) {
                 type="checkbox"
                 checked={formData.isShared}
                 onChange={(e) => setFormData({ ...formData, isShared: e.target.checked })}
-                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                className="w-4 h-4 text-[var(--purple)] border-gray-300 rounded focus:ring-[var(--purple)]"
               />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <span className="ml-2 text-sm text-gray-700">
                 Shared room (available to all departments)
               </span>
             </label>
@@ -228,7 +228,7 @@ export default function EditRoomPage({ params }: Props) {
         </div>
 
         <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Facilities
           </label>
           <div className="flex flex-wrap gap-2">
@@ -239,8 +239,8 @@ export default function EditRoomPage({ params }: Props) {
                 onClick={() => toggleFacility(facility)}
                 className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
                   formData.facilities.includes(facility)
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-[var(--purple)] text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {facility}
@@ -249,7 +249,7 @@ export default function EditRoomPage({ params }: Props) {
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-[var(--border-light)]">
           <Link href="/coordinator/rooms">
             <Button type="button" variant="secondary">
               Cancel

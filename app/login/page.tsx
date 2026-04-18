@@ -119,22 +119,28 @@ function CharactersPanel({ isTypingPassword, showPassword }: { isTypingPassword:
       </div>
       {/* Teal semicircle */}
       <div className="absolute bottom-0 transition-all duration-700 ease-in-out"
-        style={{ left: 0, width: 200, height: 160, backgroundColor: '#B4D3D9',
+        style={{ left: 0, width: 200, height: isTypingPassword ? 130 : 160, backgroundColor: '#B4D3D9',
           borderRadius: '100px 100px 0 0', zIndex: 3 }}>
-        <div className="absolute flex gap-6" style={{ left: 70, top: 75 }}>
-          <div className="rounded-full" style={{ width: 10, height: 10, backgroundColor: '#2D2D2D' }} />
-          <div className="rounded-full" style={{ width: 10, height: 10, backgroundColor: '#2D2D2D' }} />
+        <div className="absolute flex gap-6 transition-all duration-300 ease-out"
+          style={{ left: 70 + pFace.x * 0.5, top: 75 + pFace.y * 0.5 }}>
+          <EyeBall size={10} pupilSize={5} maxDistance={3} eyeColor="#2D2D2D" pupilColor="#1a1a1a"
+            isBlinking={blinkPurple} forceLookX={purpleEyeX} forceLookY={purpleEyeY} />
+          <EyeBall size={10} pupilSize={5} maxDistance={3} eyeColor="#2D2D2D" pupilColor="#1a1a1a"
+            isBlinking={blinkPurple} forceLookX={purpleEyeX} forceLookY={purpleEyeY} />
         </div>
       </div>
       {/* Lavender rounded character */}
       <div className="absolute bottom-0 transition-all duration-700 ease-in-out"
-        style={{ left: 258, width: 110, height: 185, backgroundColor: '#BDA6CE',
+        style={{ left: 258, width: 110, height: isTypingPassword ? 155 : 185, backgroundColor: '#BDA6CE',
           borderRadius: '55px 55px 0 0', zIndex: 4 }}>
-        <div className="absolute flex gap-4" style={{ left: 38, top: 45 }}>
-          <div className="rounded-full" style={{ width: 10, height: 10, backgroundColor: '#2D2D2D' }} />
-          <div className="rounded-full" style={{ width: 10, height: 10, backgroundColor: '#2D2D2D' }} />
+        <div className="absolute flex gap-4 transition-all duration-300 ease-out"
+          style={{ left: 38 + bFace.x * 0.5, top: 45 + bFace.y * 0.5 }}>
+          <EyeBall size={10} pupilSize={5} maxDistance={3} eyeColor="#2D2D2D" pupilColor="#1a1a1a"
+            isBlinking={blinkBlack} forceLookX={blackEyeX} forceLookY={blackEyeY} />
+          <EyeBall size={10} pupilSize={5} maxDistance={3} eyeColor="#2D2D2D" pupilColor="#1a1a1a"
+            isBlinking={blinkBlack} forceLookX={blackEyeX} forceLookY={blackEyeY} />
         </div>
-        <div className="absolute rounded-full" style={{ left: 35, top: 78, width: 40, height: 3, backgroundColor: '#4B3D6E' }} />
+        <div className="absolute rounded-full transition-all duration-300" style={{ left: 35 + bFace.x * 0.3, top: 78 + bFace.y * 0.3, width: 40, height: 3, backgroundColor: '#4B3D6E' }} />
       </div>
     </div>
   );
