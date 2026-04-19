@@ -152,7 +152,7 @@ export default function ReportsPage() {
             className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${
               activeTab === 'rooms'
                 ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <RoomIcon />
@@ -163,7 +163,7 @@ export default function ReportsPage() {
             className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${
               activeTab === 'faculty'
                 ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <UsersIcon />
@@ -263,12 +263,12 @@ export default function ReportsPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Room</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Building</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Capacity</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Used Slots</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Utilization</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Room</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Building</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Type</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Capacity</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Used Slots</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Utilization</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -277,7 +277,7 @@ export default function ReportsPage() {
                       <td className="px-4 py-3 font-medium text-gray-900">{report.room.name}</td>
                       <td className="px-4 py-3 text-gray-600">{report.room.building}</td>
                       <td className="px-4 py-3">
-                        <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                        <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-foreground">
                           {report.room.type}
                         </span>
                       </td>
@@ -385,12 +385,12 @@ export default function ReportsPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Faculty</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Classes</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Subjects</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Batches</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Daily Load</th>
-                    <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">Status</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Faculty</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Classes</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Subjects</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Batches</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Daily Load</th>
+                    <th className="px-4 py-3 text-center text-sm font-medium text-foreground">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">

@@ -111,7 +111,7 @@ export default function FacultySettingsPage() {
             className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${
               activeTab === 'profile'
                 ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <UserIcon />
@@ -122,7 +122,7 @@ export default function FacultySettingsPage() {
             className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${
               activeTab === 'password'
                 ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <LockIcon />
@@ -137,7 +137,7 @@ export default function FacultySettingsPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h2>
           <form onSubmit={handleProfileUpdate} className="space-y-4 max-w-lg">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Full Name</label>
               <input
                 type="text"
                 value={profileData.name}
@@ -146,7 +146,7 @@ export default function FacultySettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
               <input
                 type="email"
                 value={profileData.email}
@@ -155,7 +155,7 @@ export default function FacultySettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Department</label>
               <input
                 type="text"
                 value={profileData.department}
@@ -164,7 +164,7 @@ export default function FacultySettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
               <input
                 type="tel"
                 value={profileData.phone}
@@ -190,7 +190,7 @@ export default function FacultySettingsPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Change Password</h2>
           <form onSubmit={handlePasswordChange} className="space-y-4 max-w-lg">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Current Password</label>
               <input
                 type="password"
                 value={passwordData.currentPassword}
@@ -200,7 +200,7 @@ export default function FacultySettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">New Password</label>
               <input
                 type="password"
                 value={passwordData.newPassword}
@@ -210,7 +210,7 @@ export default function FacultySettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Confirm New Password</label>
               <input
                 type="password"
                 value={passwordData.confirmPassword}

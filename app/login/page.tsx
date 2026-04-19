@@ -162,7 +162,7 @@ export default function LoginPage() {
     try {
       const result = await signIn('credentials', { email, password, redirect: false });
       if (result?.error) { setError('Invalid email or password. Please try again.'); setLoading(false); return; }
-      router.push('/dashboard');
+      router.push('/');
       router.refresh();
     } catch { setError('An error occurred. Please try again.'); setLoading(false); }
   };

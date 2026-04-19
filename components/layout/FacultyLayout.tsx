@@ -16,7 +16,7 @@ export default async function FacultyLayout({ children }: FacultyLayoutProps) {
   }
 
   if (session.user.role !== 'faculty') {
-    redirect('/dashboard');
+    redirect('/');
   }
 
   return (
@@ -32,6 +32,8 @@ export default async function FacultyLayout({ children }: FacultyLayoutProps) {
       </div>
       <AIChatbot 
         userRole="faculty" 
+        userId={session.user.id}
+        userName={session.user.name || 'Faculty'}
         departmentId={session.user.department?.toString()} 
       />
     </div>

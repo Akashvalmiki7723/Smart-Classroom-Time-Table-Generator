@@ -395,7 +395,7 @@ export default function TimetableDetailPage({ params }: Props) {
         <div>
           <Link
             href="/coordinator/timetables"
-            className="text-[var(--purple)] hover:text-indigo-700 text-sm mb-2 inline-block"
+            className="text-primary hover:text-indigo-700 text-sm mb-2 inline-block"
           >
             ← Back to Timetables
           </Link>
@@ -481,19 +481,19 @@ export default function TimetableDetailPage({ params }: Props) {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <span className="text-[var(--purple)]">Classes Placed:</span>{' '}
+              <span className="text-primary">Classes Placed:</span>{' '}
               <span className="font-medium">{generationStats.placedClasses}/{generationStats.totalClasses}</span>
             </div>
             <div>
-              <span className="text-[var(--purple)]">Unplaced:</span>{' '}
+              <span className="text-primary">Unplaced:</span>{' '}
               <span className="font-medium">{generationStats.unplacedClasses}</span>
             </div>
             <div>
-              <span className="text-[var(--purple)]">Iterations:</span>{' '}
+              <span className="text-primary">Iterations:</span>{' '}
               <span className="font-medium">{generationStats.iterations}</span>
             </div>
             <div>
-              <span className="text-[var(--purple)]">Time:</span>{' '}
+              <span className="text-primary">Time:</span>{' '}
               <span className="font-medium">{generationStats.timeTaken}ms</span>
             </div>
           </div>
@@ -637,7 +637,7 @@ export default function TimetableDetailPage({ params }: Props) {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Subject *
               </label>
               <Select
@@ -655,7 +655,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Faculty *
               </label>
               <Select
@@ -673,7 +673,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Room *
               </label>
               <Select
@@ -691,7 +691,7 @@ export default function TimetableDetailPage({ params }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Class Type
               </label>
               <Select
@@ -764,7 +764,7 @@ export default function TimetableDetailPage({ params }: Props) {
             <h4 className="font-medium text-[var(--text-primary)]">Generation Options</h4>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Max Gaps Per Day
               </label>
               <Select
@@ -790,9 +790,9 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     preferConsecutiveLectures: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
+                  className="rounded border-input text-primary focus:ring-ring"
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-foreground">
                   Prefer consecutive lectures
                 </span>
               </label>
@@ -805,9 +805,9 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     balanceFacultyLoad: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
+                  className="rounded border-input text-primary focus:ring-ring"
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-foreground">
                   Balance faculty workload
                 </span>
               </label>
@@ -820,9 +820,9 @@ export default function TimetableDetailPage({ params }: Props) {
                     ...generationOptions,
                     prioritizePreferredSlots: e.target.checked,
                   })}
-                  className="rounded border-gray-300 text-[var(--purple)] focus:ring-[var(--purple)]"
+                  className="rounded border-input text-primary focus:ring-ring"
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-foreground">
                   Prioritize faculty preferred slots
                 </span>
               </label>

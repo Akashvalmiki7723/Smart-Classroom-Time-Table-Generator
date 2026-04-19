@@ -275,7 +275,7 @@ export default function TimeSlotsPage() {
                   }`}
                 >
                   <td className="px-6 py-4">
-                    <span className="text-lg font-bold text-[var(--purple)]">
+                    <span className="text-lg font-bold text-primary">
                       {slot.slotNumber}
                     </span>
                   </td>
@@ -359,7 +359,7 @@ export default function TimeSlotsPage() {
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Slot Name *
               </label>
               <Input
@@ -371,7 +371,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Start Time *
               </label>
               <Input
@@ -383,7 +383,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 End Time *
               </label>
               <Input
@@ -395,7 +395,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Slot Number *
               </label>
               <Input
@@ -409,7 +409,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Duration (min) *
               </label>
               <Input
@@ -423,7 +423,7 @@ export default function TimeSlotsPage() {
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Type *
               </label>
               <Select

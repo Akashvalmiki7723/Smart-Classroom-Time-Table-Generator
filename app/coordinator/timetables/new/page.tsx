@@ -3,7 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Input, Select, Loading } from '@/components/ui';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/Card';
+import { Loading } from '@/components/ui';
+import { CircleCheck } from 'lucide-react';
 
 interface Batch {
   _id: string;
@@ -14,6 +21,12 @@ interface Batch {
   studentCount: number;
 }
 
+const highlights = [
+  { id: 1, feature: 'AI-optimized scheduling with conflict resolution' },
+  { id: 2, feature: 'Faculty preferences and availability considered' },
+  { id: 3, feature: 'Room capacity and facility matching' },
+];
+
 export default function NewTimetablePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -21,29 +34,24 @@ export default function NewTimetablePage() {
   const [error, setError] = useState('');
   const [batches, setBatches] = useState<Batch[]>([]);
   const [formData, setFormData] = useState({
-    name: '',
-    batch: '',
-    academicYear: '2024-2025',
-    semester: '1',
+    name: '', batch: '', academicYear: '2024-2025', semester: '1',
   });
 
   useEffect(() => {
-    fetchBatches();
-  }, []);
-
-  const fetchBatches = async () => {
-    try {
-      const response = await fetch('/api/coordinator/batches?active=true');
-      if (response.ok) {
-        const data = await response.json();
-        setBatches(data.batches);
+    (async () => {
+      try {
+        const response = await fetch('/api/coordinator/batches?active=true');
+        if (response.ok) {
+          const data = await response.json();
+          setBatches(data.batches);
+        }
+      } catch (error) {
+        console.error('Error fetching batches:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching batches:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    })();
+  }, []);
 
   const handleBatchChange = (batchId: string) => {
     const batch = batches.find((b) => b._id === batchId);
@@ -55,10 +63,7 @@ export default function NewTimetablePage() {
         name: `${batch.name} Timetable`,
       });
     } else {
-      setFormData({
-        ...formData,
-        batch: batchId,
-      });
+      setFormData({ ...formData, batch: batchId });
     }
   };
 
@@ -71,14 +76,9 @@ export default function NewTimetablePage() {
       const response = await fetch('/api/coordinator/timetables', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          semester: parseInt(formData.semester),
-        }),
+        body: JSON.stringify({ ...formData, semester: parseInt(formData.semester) }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         router.push(`/coordinator/timetables/${data._id}`);
       } else {
@@ -91,149 +91,110 @@ export default function NewTimetablePage() {
     }
   };
 
-  if (loading) {
-    return <Loading text="Loading..." />;
-  }
+  if (loading) return <Loading text="Loading..." />;
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Page Header */}
-      <div className="mb-8">
-        <Link
-          href="/coordinator/timetables"
-          className="text-[var(--purple)] hover:opacity-80 text-sm mb-2 inline-block"
-        >
-          ← Back to Timetables
-        </Link>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
-          Create New Timetable
-        </h1>
-        <p className="text-[var(--text-secondary)]">
-          Set up basic timetable information
-        </p>
-      </div>
-
-      {/* Steps Indicator */}
-      <div className="bg-[var(--surface)] rounded-xl shadow p-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-[var(--purple)] text-white rounded-full flex items-center justify-center font-bold">
-              1
-            </div>
-            <span className="ml-2 text-sm font-medium text-[var(--purple)]">
-              Basic Info
-            </span>
-          </div>
-          <div className="flex-1 h-1 mx-4 bg-gray-200 " />
-          <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 text-[var(--text-secondary)] rounded-full flex items-center justify-center font-bold">
-              2
-            </div>
-            <span className="ml-2 text-sm text-[var(--text-muted)]">
-              Add Classes
-            </span>
-          </div>
-          <div className="flex-1 h-1 mx-4 bg-gray-200 " />
-          <div className="flex items-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 text-[var(--text-secondary)] rounded-full flex items-center justify-center font-bold">
-              3
-            </div>
-            <span className="ml-2 text-sm text-[var(--text-muted)]">
-              Review & Submit
-            </span>
-          </div>
+    <div className="flex items-start justify-center p-6 lg:p-10">
+      <form onSubmit={handleSubmit} className="sm:mx-auto sm:max-w-7xl w-full">
+        <div className="mb-2">
+          <Link href="/coordinator/timetables" className="text-sm text-primary hover:underline hover:underline-offset-4">← Back to Timetables</Link>
         </div>
-      </div>
+        <h3 className="text-xl font-semibold text-foreground">Create New Timetable</h3>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-[var(--surface)] rounded-xl shadow p-6">
         {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
-            {error}
+          <div className="mt-6 rounded-lg border border-destructive/50 bg-destructive/10 p-4">
+            <p className="text-sm text-destructive">{error}</p>
           </div>
         )}
 
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700  mb-2">
-              Select Batch *
-            </label>
-            <Select
-              value={formData.batch}
-              onChange={(e) => handleBatchChange(e.target.value)}
-              required
-            >
-              <option value="">Choose a batch...</option>
-              {batches.map((batch) => (
-                <option key={batch._id} value={batch._id}>
-                  {batch.name} ({batch.studentCount} students)
-                </option>
-              ))}
-            </Select>
-            {batches.length === 0 && (
-              <p className="mt-2 text-sm text-amber-600">
-                No active batches found.{' '}
-                <Link href="/coordinator/batches/new" className="underline">
-                  Create a batch first
-                </Link>
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700  mb-2">
-              Timetable Name *
-            </label>
-            <Input
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g., 3rd Year Div A Timetable"
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700  mb-2">
-                Academic Year *
-              </label>
-              <Select
-                value={formData.academicYear}
-                onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
-                required
-              >
-                <option value="2024-2025">2024-2025</option>
-                <option value="2025-2026">2025-2026</option>
-                <option value="2026-2027">2026-2027</option>
-              </Select>
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="mt-6 lg:col-span-7">
+            <div className="space-y-4 md:space-y-6">
+              <div className="md:flex md:items-start md:space-x-4">
+                <div className="md:w-full">
+                  <Label htmlFor="batch" className="font-medium">
+                    Select Batch<span className="text-red-500">*</span>
+                  </Label>
+                  <Select id="batch" className="mt-2" value={formData.batch}
+                    onChange={(e) => handleBatchChange(e.target.value)}>
+                    <option value="">Choose a batch...</option>
+                    {batches.map((batch) => (
+                      <option key={batch._id} value={batch._id}>
+                        {batch.name} ({batch.studentCount} students)
+                      </option>
+                    ))}
+                  </Select>
+                  {batches.length === 0 && (
+                    <p className="mt-2 text-sm text-amber-600">
+                      No active batches found.{' '}
+                      <Link href="/coordinator/batches/new" className="underline">Create a batch first</Link>
+                    </p>
+                  )}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    The timetable will be generated for the selected batch
+                  </p>
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="ttName" className="font-medium">
+                  Timetable Name<span className="text-red-500">*</span>
+                </Label>
+                <Input id="ttName" className="mt-2" required value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g., 3rd Year Div A Timetable" />
+              </div>
+              <div className="md:flex md:items-start md:space-x-4">
+                <div className="md:w-1/2">
+                  <Label htmlFor="academicYear" className="font-medium">Academic Year<span className="text-red-500">*</span></Label>
+                  <Select id="academicYear" className="mt-2" value={formData.academicYear}
+                    onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026">2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                  </Select>
+                </div>
+                <div className="mt-4 md:mt-0 md:w-1/2">
+                  <Label htmlFor="semester" className="font-medium">Semester<span className="text-red-500">*</span></Label>
+                  <Select id="semester" className="mt-2" value={formData.semester}
+                    onChange={(e) => setFormData({ ...formData, semester: e.target.value })}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                      <option key={sem} value={sem}>Semester {sem}</option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700  mb-2">
-                Semester *
-              </label>
-              <Select
-                value={formData.semester}
-                onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                required
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                  <option key={sem} value={sem}>
-                    Semester {sem}
-                  </option>
-                ))}
-              </Select>
-            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <Card className="bg-muted">
+              <CardContent>
+                <h4 className="text-sm font-semibold text-foreground">
+                  Smart Timetable Generation
+                </h4>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Our AI-powered system will automatically generate an optimized timetable
+                  considering faculty availability, room capacity, and scheduling constraints.
+                </p>
+                <ul className="mt-4 space-y-1">
+                  {highlights.map((item) => (
+                    <li key={item.id} className="flex items-center space-x-2 py-1.5 text-foreground">
+                      <CircleCheck className="h-5 w-5 text-primary" />
+                      <span className="truncate text-sm">{item.feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        <div className="flex justify-between gap-4 mt-8 pt-6 border-t border-[var(--border-light)]">
-          <Link href="/coordinator/timetables">
-            <Button type="button" variant="secondary">
-              Cancel
-            </Button>
-          </Link>
-          <Button type="submit" disabled={saving || !formData.batch}>
+        <Separator className="my-10" />
+
+        <div className="flex items-center justify-between">
+          <Button type="button" variant="ghost" onClick={() => router.push('/coordinator/timetables')}>
+            Cancel
+          </Button>
+          <Button type="submit" isLoading={saving} disabled={saving || !formData.batch}>
             {saving ? 'Creating...' : 'Create & Continue →'}
           </Button>
         </div>

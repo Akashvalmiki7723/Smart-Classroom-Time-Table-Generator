@@ -7,7 +7,7 @@ import AIChatbot from '@/components/AIChatbot';
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   if (!session?.user) redirect('/login');
-  if (session.user.role !== 'admin') redirect('/dashboard');
+  if (session.user.role !== 'admin') redirect('/');
 
   return (
     <div className="min-h-screen flex" style={{ background: 'var(--bg)' }}>
@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Navbar user={session.user} />
         <main className="flex-1 p-6">{children}</main>
       </div>
-      <AIChatbot userRole="admin" />
+      <AIChatbot userRole="admin" userId={session.user.id} userName={session.user.name || 'Admin'} />
     </div>
   );
 }

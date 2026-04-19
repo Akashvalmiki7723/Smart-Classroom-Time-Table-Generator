@@ -2,7 +2,13 @@
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Card, Input, Select, Loading } from '@/components/ui';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Loading } from '@/components/ui';
+import Link from 'next/link';
 
 interface Department {
   _id: string;
@@ -50,7 +56,6 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch user and departments in parallel
         const [userRes, deptRes] = await Promise.all([
           fetch(`/api/users/${id}`),
           fetch('/api/departments?all=true'),
@@ -95,7 +100,6 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
     setSaving(true);
 
     try {
-      // Only send password if it was changed
       const updateData = { ...formData };
       if (!updateData.password) {
         delete (updateData as Record<string, unknown>).password;
@@ -122,11 +126,6 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
     }
   };
 
-  const departmentOptions = [
-    { value: '', label: 'No Department' },
-    ...departments.map(d => ({ value: d._id, label: `${d.name} (${d.code})` })),
-  ];
-
   if (loading) {
     return (
       <div className="flex justify-center py-12">
@@ -136,105 +135,121 @@ export default function EditUserPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit User</h1>
-        <p className="text-gray-600 dark:text-gray-400">Update user account details</p>
-      </div>
+    <div className="flex items-start justify-center p-6 lg:p-10">
+      <form onSubmit={handleSubmit} className="sm:mx-auto sm:max-w-5xl w-full">
+        <div className="mb-2">
+          <Link href="/admin/users" className="text-sm text-primary hover:underline hover:underline-offset-4">
+            ← Back to Users
+          </Link>
+        </div>
+        <h3 className="text-xl font-semibold text-foreground">Edit User</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Update user account details.</p>
 
-      <Card>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-red-600 dark:text-red-400">{error}</p>
-            </div>
-          )}
+        {error && (
+          <div className="mt-6 rounded-lg border border-destructive/50 bg-destructive/10 p-4">
+            <p className="text-sm text-destructive">{error}</p>
+          </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input
-              label="Full Name"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="John Doe"
-            />
+        <Separator className="my-8" />
 
-            <Input
-              label="Email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="john@college.edu"
-            />
-
-            <Input
-              label="New Password"
-              type="password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="Leave blank to keep current"
-            />
-
-            <Select
-              label="Role"
-              required
-              options={roleOptions}
-              value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            />
-
-            <Select
-              label="Department"
-              options={departmentOptions}
-              value={formData.department}
-              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-            />
-
-            <Input
-              label="Phone"
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              placeholder="+91 9876543210"
-            />
-
-            <Input
-              label="Employee/Student ID"
-              value={formData.employeeId}
-              onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
-              placeholder="EMP001 or STU001"
-            />
-
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                id="isActive"
-                checked={formData.isActive}
-                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 rounded border-gray-300"
-              />
-              <label htmlFor="isActive" className="text-sm text-gray-700 dark:text-gray-300">
-                Active Account
-              </label>
+        {/* Personal Information */}
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          <div>
+            <h4 className="font-medium text-foreground">Personal Information</h4>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              Update the user&apos;s identity details.
+            </p>
+          </div>
+          <div className="md:col-span-2">
+            <div className="space-y-4 md:space-y-6">
+              <div className="md:flex md:items-start md:space-x-4">
+                <div className="md:w-1/2">
+                  <Label htmlFor="name" className="font-medium">Full Name<span className="text-red-500">*</span></Label>
+                  <Input id="name" className="mt-2" required value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="John Doe" />
+                </div>
+                <div className="mt-4 md:mt-0 md:w-1/2">
+                  <Label htmlFor="email" className="font-medium">Email<span className="text-red-500">*</span></Label>
+                  <Input id="email" type="email" className="mt-2" required value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="john@college.edu" />
+                </div>
+              </div>
+              <div className="md:flex md:items-start md:space-x-4">
+                <div className="md:w-1/2">
+                  <Label htmlFor="phone" className="font-medium">Phone</Label>
+                  <Input id="phone" type="tel" className="mt-2" value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="+91 9876543210" />
+                </div>
+                <div className="mt-4 md:mt-0 md:w-1/2">
+                  <Label htmlFor="employeeId" className="font-medium">Employee/Student ID</Label>
+                  <Input id="employeeId" className="mt-2" value={formData.employeeId}
+                    onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })} placeholder="EMP001 or STU001" />
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push('/admin/users')}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={saving}>
-              {saving ? 'Saving...' : 'Save Changes'}
-            </Button>
+        <Separator className="my-10" />
+
+        {/* Account Settings */}
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+          <div>
+            <h4 className="font-medium text-foreground">Account Settings</h4>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              Manage credentials, role assignment and department.
+            </p>
           </div>
-        </form>
-      </Card>
+          <div className="md:col-span-2">
+            <div className="space-y-4 md:space-y-6">
+              <div>
+                <Label htmlFor="password" className="font-medium">New Password</Label>
+                <Input id="password" type="password" className="mt-2" value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder="Leave blank to keep current" />
+                <p className="mt-2 text-sm text-muted-foreground">Only fill this if you want to change the password.</p>
+              </div>
+              <div className="md:flex md:items-start md:space-x-4">
+                <div className="md:w-1/2">
+                  <Label htmlFor="role" className="font-medium">Role<span className="text-red-500">*</span></Label>
+                  <Select id="role" className="mt-2" required options={roleOptions} value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })} />
+                </div>
+                <div className="mt-4 md:mt-0 md:w-1/2">
+                  <Label htmlFor="department" className="font-medium">Department</Label>
+                  <Select id="department" className="mt-2" value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}>
+                    <option value="">No Department</option>
+                    {departments.map(d => (
+                      <option key={d._id} value={d._id}>{d.name} ({d.code})</option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <div>
+                <label className="relative block cursor-pointer rounded-md border border-border bg-background px-6 py-4 transition hover:bg-muted/50">
+                  <div className="flex items-center space-x-4">
+                    <input type="checkbox" checked={formData.isActive}
+                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                      className="h-4 w-4 rounded border-input text-primary focus:ring-ring" />
+                    <div>
+                      <p className="font-medium text-foreground text-sm">Active Account</p>
+                      <p className="text-xs text-muted-foreground">Inactive accounts cannot log in to the system.</p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Separator className="my-10" />
+
+        <div className="flex items-center justify-end space-x-4">
+          <Button type="button" variant="ghost" onClick={() => router.push('/admin/users')}>Cancel</Button>
+          <Button type="submit" isLoading={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
+        </div>
+      </form>
     </div>
   );
 }

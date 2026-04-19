@@ -16,7 +16,7 @@ export default async function CoordinatorLayout({ children }: CoordinatorLayoutP
   }
 
   if (session.user.role !== 'coordinator') {
-    redirect('/dashboard');
+    redirect('/');
   }
 
   return (
@@ -32,6 +32,8 @@ export default async function CoordinatorLayout({ children }: CoordinatorLayoutP
       </div>
       <AIChatbot 
         userRole="coordinator" 
+        userId={session.user.id}
+        userName={session.user.name || 'Coordinator'}
         departmentId={session.user.department?.toString()} 
       />
     </div>
