@@ -24,7 +24,7 @@ const contentVariants = {
   open:   { opacity: 1, x: 0,   display: 'block',  transition: { delay: 0.1 } },
   closed: { opacity: 0, x: -10, transitionEnd: { display: 'none' } },
 };
-const transitionProps = { type: 'tween', ease: 'easeOut', duration: 0.2 };
+const transitionProps: any = { type: 'tween', ease: 'easeOut', duration: 0.2 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Nav configs per role

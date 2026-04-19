@@ -72,7 +72,8 @@ function ToastContainer() {
 
   useEffect(() => {
     setToasts([...store.toasts]);
-    return store.subscribe(() => setToasts([...store.toasts]));
+    const unsub = store.subscribe(() => setToasts([...store.toasts]));
+    return () => { unsub(); };
   }, []);
 
   useEffect(() => {

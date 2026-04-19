@@ -217,7 +217,6 @@ export default function FacultySchedulePage() {
                               </span>
                               <Badge
                                 variant={entry.type === 'practical' ? 'success' : 'info'}
-                                size="sm"
                               >
                                 {entry.type}
                               </Badge>

@@ -107,7 +107,7 @@ ${activeTimeSlots.map((ts: { name: string; startTime: string; endTime: string; t
 
 ### Your Timetables (most recent):
 ${timetables.length > 0
-  ? timetables.map((tt: Record<string, unknown>) => {
+  ? timetables.map((tt: any) => {
       const dept = tt.department as { name?: string } | null;
       return `- "${tt.name}" — Status: ${tt.status}, Department: ${dept?.name || 'N/A'}, Entries: ${(tt.entries as unknown[])?.length || 0}`;
     }).join('\n')
@@ -117,7 +117,7 @@ ${timetables.length > 0
 ${rooms.slice(0, 10).map((r: { name: string; building: string; type: string; capacity: number }) => `- ${r.name} (${r.building}, ${r.type}, capacity: ${r.capacity})`).join('\n')}
 
 ### Batches:
-${batches.map((b: Record<string, unknown>) => {
+${batches.map((b: any) => {
   const dept = b.department as { name?: string } | null;
   return `- ${b.name} — Year ${b.year}, Sem ${b.semester}, Div ${b.division}, Students: ${b.studentCount}, Dept: ${dept?.name || 'N/A'}`;
 }).join('\n') || '- No batches found'}
@@ -141,7 +141,7 @@ ${timeSlots.map((ts: { name: string; startTime: string; endTime: string; type: s
       // Extract this faculty's entries
       const myEntries: { day: string; slot: number; subject: string; room: string; batch: string; type: string }[] = [];
       for (const tt of timetables) {
-        for (const entry of (tt.entries || []) as Record<string, unknown>[]) {
+        for (const entry of (tt.entries || []) as any[]) {
           const entryFaculty = entry.faculty as { toString?: () => string } | string;
           const facultyId = typeof entryFaculty === 'string' ? entryFaculty : entryFaculty?.toString?.();
           if (facultyId === userId) {
@@ -188,7 +188,7 @@ ${DAY_NAMES.map(day => {
 }).join('\n')}
 
 ### Your Assigned Subjects (${assignedSubjects.length}):
-${assignedSubjects.map((s: Record<string, unknown>) => {
+${assignedSubjects.map((s: any) => {
   const dept = s.department as { name?: string } | null;
   return `- ${s.name} (${s.code}) — ${s.type}, Sem ${s.semester}, ${s.credits} credits, Dept: ${dept?.name || 'N/A'}`;
 }).join('\n') || '- No subjects directly assigned'}
