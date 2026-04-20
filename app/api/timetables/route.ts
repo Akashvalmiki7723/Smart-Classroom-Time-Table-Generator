@@ -48,17 +48,32 @@ export async function GET(request: NextRequest) {
       const user = await User.findById(session.user.id);
       if (user?.department) {
         filter.department = user.department;
-        // Find batches matching student's year and section
-        // For now, return all published timetables for the department
-        filter.status = 'published';
+        // Show published and approved timetables to students
+        filter.status = { $in: ['published', 'approved'] };
       }
     }
 
     const timetables = await Timetable.find(filter)
       .populate('department', 'name code')
-      .populate('batch', 'name year division')
+      .populate('batch', 'name year division semester studentCount')
       .populate('createdBy', 'name')
       .populate('approvedBy', 'name')
+      .populate({
+        path: 'entries.subject',
+        select: 'name code credits type',
+      })
+      .populate({
+        path: 'entries.faculty',
+        select: 'name email',
+      })
+      .populate({
+        path: 'entries.room',
+        select: 'name building floor type',
+      })
+      .populate({
+        path: 'entries.batch',
+        select: 'name year division semester',
+      })
       .sort({ createdAt: -1 });
 
     return NextResponse.json({ success: true, timetables });

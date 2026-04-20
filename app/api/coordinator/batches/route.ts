@@ -30,6 +30,13 @@ export async function GET(request: NextRequest) {
 
     const departmentId = session.user.department;
 
+    if (!departmentId) {
+      return NextResponse.json(
+        { error: 'No department assigned to your account. Please contact admin.', batches: [] },
+        { status: 200 }
+      );
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: any = { department: departmentId };
 
@@ -84,6 +91,13 @@ export async function POST(request: NextRequest) {
     }
 
     const departmentId = session.user.department;
+
+    if (!departmentId) {
+      return NextResponse.json(
+        { error: 'No department assigned to your account. Please contact admin.' },
+        { status: 400 }
+      );
+    }
 
     // Check if batch already exists
     const existingBatch = await Batch.findOne({
